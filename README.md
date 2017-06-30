@@ -4,7 +4,7 @@
 ## 注意
 - 正文见 [Issues](https://github.com/gwuhaolin/blog/issues)
 - 转载请注明出处
-- 喜欢的话请点star，想订阅点watch，fork没意义
+- 喜欢点star，想订阅点watch，fork没意义
 
 ## 目录
 ### webpack
