@@ -13,6 +13,7 @@
 
 ### 音视频
 - [使用flv.js做直播](https://github.com/gwuhaolin/blog/issues/3)
+- [流媒体加密](https://github.com/gwuhaolin/blog/issues/10)
 
 ### react
 - [快速优雅的为React组件生成文档](https://github.com/gwuhaolin/blog/issues/1)
