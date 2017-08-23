@@ -21,5 +21,5 @@
 
 ## 注意
 - 正文见 [Issues](https://github.com/gwuhaolin/blog/issues)
-- 转载请注明出处
+- 转载必须注明出处，未经同意任何人不得用于商业用途。
 - 喜欢点star，想订阅点watch，fork没意义，想参与一篇文章的讨论点文章左下角的👍
