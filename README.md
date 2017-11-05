@@ -23,6 +23,7 @@
 
 ### 网络
 - [调试利器-SSH隧道](https://github.com/gwuhaolin/blog/issues/11)
+- [你也能写个 Shadowsocks](https://github.com/gwuhaolin/blog/issues/12)
 
 ## 注意
 - 正文见 [Issues](https://github.com/gwuhaolin/blog/issues)
