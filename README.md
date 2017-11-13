@@ -1,10 +1,6 @@
 # 浩麟的技术博客
 实用、前沿、深入、原创
 
-<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/3bvxELAxnq8r4wheFyRkED8U/gwuhaolin/koa-seo'>
-  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/3bvxELAxnq8r4wheFyRkED8U/gwuhaolin/koa-seo.svg' />
-</a>
-
 ## 目录
 ### Webpack
 - [webpack原理与实战](https://github.com/gwuhaolin/blog/issues/4)
