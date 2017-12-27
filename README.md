@@ -5,6 +5,7 @@
 ### Webpack
 - [webpack原理与实战](https://github.com/gwuhaolin/blog/issues/4)
 - [webpack2 终极优化](https://github.com/gwuhaolin/blog/issues/2)
+- [Parcel Vs Webpack](https://github.com/gwuhaolin/blog/issues/13)
 
 ### 音视频
 - [使用flv.js做直播](https://github.com/gwuhaolin/blog/issues/3)
