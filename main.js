@@ -51,14 +51,14 @@ ${tags.map(tag => `    - ${tag}`).join('\n')}
 ---
 
 ${body}`;
-        fs.writeFileSync(`hexo/source/_posts/${title}.md`, mdContent);
+        fs.writeFileSync(`./source/_posts/${title}.md`, mdContent);
     });
     console.info('更新 md 完毕');
-    execSync(`rm -rf hexo/public`);
-    fs.mkdirSync('hexo/public');
-    fs.writeFileSync('hexo/public/CNAME', 'wuhaolin.cn');
+    execSync(`rm -rf ./public`);
+    fs.mkdirSync('./public');
+    fs.writeFileSync('./public/CNAME', 'wuhaolin.cn');
 
-    const hexo = new Hexo(path.resolve(__dirname, 'hexo'), {});
+    const hexo = new Hexo();
     hexo.init().then(function () {
         hexo.call('generate').then(function () {
             console.log('网站生成完毕');
