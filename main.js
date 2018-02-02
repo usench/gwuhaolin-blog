@@ -58,7 +58,7 @@ ${body}`;
     fs.mkdirSync('hexo/public');
     fs.writeFileSync('hexo/public/CNAME', 'wuhaolin.cn');
 
-    const hexo = new Hexo(path.resolve(process.cwd(), 'hexo'), {});
+    const hexo = new Hexo(path.resolve(__dirname, 'hexo'), {});
     hexo.init().then(function () {
         hexo.call('generate').then(function () {
             console.log('网站生成完毕');
