@@ -1,0 +1,12 @@
+{
+  "name": "issue2blog",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "node main.js"
+  },
+  "dependencies": {
+    "hexo": "^3.5.0",
+    "lokka": "^1.7.0",
+    "lokka-transport-http": "^1.6.1"
+  }
+}
