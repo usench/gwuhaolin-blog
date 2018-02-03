@@ -56,7 +56,7 @@ ${body}`;
     console.info('更新 md 完毕');
     execSync(`rm -rf ./public`);
     fs.mkdirSync('./public');
-    fs.writeFileSync('./public/CNAME', 'wuhaolin.cn');
+    fs.writeFileSync('./public/CNAME', 'wuhaolin.cn\nwww.wuhaolin.cn');
 
     const hexo = new Hexo();
     hexo.init().then(function () {
