@@ -2,6 +2,18 @@
 <footer>
     <div class="container">
         <div class="row">
+
+            <!--AdSence Blog-->
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- blog -->
+            <ins class="adsbygoogle"
+                 style="width: 100%"
+                 data-ad-client="ca-pub-9697944574373240"
+                 data-ad-slot="3264686777"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <ul class="list-inline text-center">
                 <% if (config.RSS) { %>
@@ -117,24 +129,6 @@
     }
 </script>
 
-<!-- 
-     Because of the native support for backtick-style fenced code blocks 
-     right within the Markdown is landed in Github Pages, 
-     From V1.6, There is no need for Highlight.js, 
-     so Huxblog drops it officially.
-
-     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
-     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
--->
-<!--
-    <script>
-        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
-            hljs.initHighlightingOnLoad();
-        })
-    </script>
-    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
--->
-
 
 <!-- jquery.tagcloud.js -->
 <script>
@@ -179,23 +173,6 @@
 
 <% } %>
 
-
-<!-- Baidu Tongji -->
-<% if (config.ba_track_id) { %>
-<script>
-    // dynamic User by Hux
-    var _baId = '<%= config.ba_track_id %>';
-
-    // Originial
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?" + _baId;
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-</script>
-<% } %>
 
 <!-- Side Catalog -->
 <% if (page.catalog) { %>
@@ -244,3 +221,18 @@
 </script>
 <% } %>
 
+<!--京东广告-->
+<script type="text/javascript">var jd_union_unid = "1000357173", jd_ad_ids = "505:6",
+        jd_union_pid = "CK6+/7GVLBC1+oDdAxoAIKLx1KsEKgA=";
+    var jd_width = 960;
+    var jd_height = 90;
+    var jd_union_euid = "";
+    var p = "AhIAURlbFAISBWVEH0hfIlgRRgYlXVZaCCsfSlpMWGVEH0hfIkYAeVNzRlJQNnkhSHZBe1BkJmgcVXdZF2sVAhUFUhpdFgsUN1UaWhQAFgFVHVklMk1DCEZrXmwTNwpfBkgyEgNVHV8TAxcOVRNcHTITN2Ur";</script>
+<script type="text/javascript" charset="utf-8" src="//u-x.jd.com/static/js/auto.js"></script>
+<script>
+    // 隐藏JD广告
+    jdFrame = document.querySelector('iframe[src^="//u-x.jd.com/"]');
+    if (jdFrame) {
+        jdFrame.parentElement.style.display = 'none';
+    }
+</script>
