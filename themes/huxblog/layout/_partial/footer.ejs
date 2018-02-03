@@ -236,3 +236,19 @@
         jdFrame.parentElement.style.display = 'none';
     }
 </script>
+
+<!--搜狗广告-->
+<script type="text/javascript">
+    var sogou_ad_id=956127;
+    var sogou_ad_height=90;
+    var sogou_ad_width=728;
+</script>
+<script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
+<script>
+    // 隐藏搜狗广告
+    // 隐藏JD广告
+    sgFrame = document.querySelector('iframe[src^="http://inte.sogou.com"]');
+    if (sgFrame) {
+        sgFrame.style.display = 'none';
+    }
+</script>
