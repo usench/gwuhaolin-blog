@@ -92,7 +92,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; <%= config.title %> <%= new Date().getFullYear() %> 
+                    Copyright &copy; <%= config.title %> <%= new Date().getFullYear() %>
                     <br>
                     Ported by <a href="https://github.com/gwuhaolin">gwuhaolin</a> |
                     <iframe
@@ -187,7 +187,7 @@
             l = $('<li class="'+n+'_nav"></li>').append(c);
             $(selector).append(l);
         });
-        return true;    
+        return true;
     }
 
     generateCatalog(".catalog-body");
@@ -259,4 +259,6 @@
 <script type="text/javascript" src="//cpro.baidustatic.com/cpro/ui/c.js"></script>
 <script>
     // 隐藏百度广告
+    baiduFrame = document.querySelector('#BAIDU_SSP__wrapper_'+cpro_id+'_0');
+    baiduFrame.style.display = 'none';
 </script>
