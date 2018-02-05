@@ -259,6 +259,8 @@
 <script type="text/javascript" src="//cpro.baidustatic.com/cpro/ui/c.js"></script>
 <script>
     // 隐藏百度广告
-    baiduFrame = document.querySelector('#BAIDU_SSP__wrapper_u3202612_0');
-    baiduFrame.style.display = 'none';
+    baiduFrame = document.querySelector('div[id^="BAIDU_SSP__wrapper_"]');
+    if(baiduFrame){
+        baiduFrame.style.display = 'none';
+    }
 </script>
