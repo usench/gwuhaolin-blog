@@ -60,7 +60,8 @@ ${body}`;
 
     const hexo = new Hexo();
     hexo.init().then(function () {
-        hexo.call('generate').then(function () {
+        hexo.call('generate',{}).then(function () {
+            execSync(`mv public docs`);
             console.log('网站生成完毕');
             process.exit(0);
         });

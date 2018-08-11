@@ -43,6 +43,6 @@ jobs:
     - deploy:
         name: Deploy
         command: |
-              git add public
+              git add docs
               git commit -m 'hexo build'
               git push
