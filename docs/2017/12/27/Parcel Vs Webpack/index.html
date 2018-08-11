@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          Parcel Vs Webpack - 浩麟的博客
+        
+    </title>
+
+    <link rel="canonical" href="https://wuhaolin.cn/2017/12/27/Parcel Vs Webpack/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">浩麟的博客</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">关于</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">归档</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">标签</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+<!-- Main Content -->
+
+<!-- Image to hack wechat -->
+<!-- <img src="https://wuhaolin.cn/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#webpack" title="webpack">webpack</a>
+                        
+                    </div>
+                    <h1>Parcel Vs Webpack</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by 吴浩麟 on
+                        2017-12-27
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <blockquote>
+<p>爱折腾的前端圈时常会有新轮子诞生，只要是好东西就能快速获得大量关注，资历再好的大哥只要不如新人也很快会被替代。</p>
+</blockquote>
+<p>横空出世的<a href="https://parceljs.org/" target="_blank" rel="noopener">Parcel</a>近日成为了前端圈的又一大热点，在短短几周内就获得了13K的Star。<br>作为前端构建工具新人的Parcel为什么能在短期内获得这么多赞同？他和老大哥Webpack比起来到底有什么优势呢？</p>
+<p>我花了6个月的时间写了一本全面介绍Webpack的图书<a href="http://webpack.wuhaolin.cn/" target="_blank" rel="noopener">《深入浅出 Webpack》</a>近日刚出版，感觉被新出的Parcel给腰斩了。<br>但本文将本着公平公正的心态来详细对比一下他两，让你能明白他们直接的异同和优缺点对比，好决定是选Parcel还是Webpack。</p>
+<p>为了对比他两，我们从实际出发举一个实战项目为例子，分别用Parcel和Webpack去实现，实战项目要求如下：</p>
+<ul>
+<li>项目采用TypeScript+React+SCSS；</li>
+<li>项目采用了<a href="https://ant.design" target="_blank" rel="noopener">Antd</a> UI组件库，但要做到按需加载只用到了的组件，而不是所有组件都打包进去；</li>
+<li>项目使用了<a href="https://lodash.com" target="_blank" rel="noopener">Lodash</a>库，用于检查构建是否有剔除无用代码的能力(TreeShaking)；</li>
+<li>构建需要支持模块热替换功能，以提高开发效率；</li>
+<li>支持SourceMap，以方便调试；</li>
+<li>对比他们的首次启动速度和监听变化时的构建速度；</li>
+<li>在生成环境下需要压缩JS、CSS，CSS需要提取到单独到文件，并对比他们在生产环境下构建出文件大小；</li>
+<li>需要生成自动会加载对应资源的HTML文件；</li>
+</ul>
+<h3 id="Parcel让人眼前一亮"><a href="#Parcel让人眼前一亮" class="headerlink" title="Parcel让人眼前一亮"></a>Parcel让人眼前一亮</h3><p>在用了很久Webpack后用Parcel的感觉就像用了很久Android机后用iPhone，不用再去操心细节和配置，大多数时候Parcel刚刚够用而且用的很舒服。</p>
+<p>用Parcel去完成以上项目的要求，我只是专心去写项目页面所必须的代码，Parcel智能快速的帮我构建出了能正常运行的结果。</p>
+<p>以下是Parcel让我心动的点：</p>
+<ul>
+<li>Parcel能做到无配置完成以上项目构建要求；</li>
+<li>Parcel内置了常见场景的构建方案及其依赖，无需再安装各种依赖；</li>
+<li>Parcel能以HTML为入口，自动检测和打包依赖资源；</li>
+<li>Parcel默认支持模块热替换，真正的开箱即用；</li>
+</ul>
+<p>而反观Webpack，比Parcel要麻烦很多：</p>
+<ul>
+<li>需要写<a href="https://github.com/gwuhaolin/parcel-vs-webpack/blob/master/webpack.config.js" target="_blank" rel="noopener">一堆配置</a>；</li>
+<li>需要再安装<a href="https://github.com/gwuhaolin/parcel-vs-webpack/blob/master/package.json" target="_blank" rel="noopener">一堆依赖</a>；</li>
+<li>不能简单的自动生成HTML；</li>
+</ul>
+<p>这个项目我用Parcel时花在构建配置上的时间不到一分钟，而用Webpack构建时花了5分钟去配置。</p>
+<h3 id="Parcel还需要时间去打磨"><a href="#Parcel还需要时间去打磨" class="headerlink" title="Parcel还需要时间去打磨"></a>Parcel还需要时间去打磨</h3><p>通过以上项目实践，发现Parcel目前有如下明显的缺点：</p>
+<ul>
+<li><strong>不支持SourceMap</strong>：在开发模式下，Parcel也不会输出SourceMap，目前只能去调试可读性极低的代码；</li>
+<li><strong>不支持剔除无效代码(TreeShaking)</strong>：很多时候我们只用到了库中的一个函数，结果Parcel把整个库都打包了进来；</li>
+<li><strong>一些依赖会让Parcel出错</strong>：当你的项目依赖了一些Npm上的模块时，有些Npm模块会让Parcel运行错误；</li>
+</ul>
+<h3 id="Parcel需要为零配置付出代价"><a href="#Parcel需要为零配置付出代价" class="headerlink" title="Parcel需要为零配置付出代价"></a>Parcel需要为零配置付出代价</h3><p>零配置其实是把各种常见的场景做为默认值来实现的，这虽然能节省很多工作量，快速上手，但这同时会带来一些问题：</p>
+<ul>
+<li><strong>不守规矩的node_module</strong>：有些依赖的库在发布到Npm上时可能不小心把<code>.babelrc</code> <code>postcss.config.js</code> <code>tsconfig.json</code>这些配置文件也一起发布上去了，<br>由于目前Parcel只要在目录中发现这些配置文件就会认为该项目中的代码需要被处理。例如mini-store这个库中就把<code>.babelrc</code>文件发布到了Npm上，项目依赖的本来是lib中已经编译成了ES5的JS代码了，但Parcel还会去用Babel处理一遍。<br>Npm官方并没有规定发布到Npm上的包需要符合哪些规范，这会让Parcel很为难。</li>
+<li><strong>不灵活的配置</strong>：零配置的Parcel关闭了很多配置项，在一些需要的配置的场景下无法改变。例如：<ul>
+<li>无法控制对部分文件的特殊处理，以实现诸如按需加载这样的需求；</li>
+<li>无法控制<a href="http://webpack.wuhaolin.cn/2%E9%85%8D%E7%BD%AE/2-2Output.html" target="_blank" rel="noopener">输出文件名的Hash值和名称</a>；</li>
+<li>无法控制构建输出目录结构；</li>
+<li>无法<a href="http://webpack.wuhaolin.cn/2%E9%85%8D%E7%BD%AE/2-4Resolve.html" target="_blank" rel="noopener">映射路径以缩短导入语句</a>；</li>
+<li>HTTP开发服务器不支持<a href="http://webpack.wuhaolin.cn/2%E9%85%8D%E7%BD%AE/2-6DevServer.html" target="_blank" rel="noopener">HistoryApi</a>；</li>
+</ul>
+</li>
+</ul>
+<h3 id="Parcel使用场景受限"><a href="#Parcel使用场景受限" class="headerlink" title="Parcel使用场景受限"></a>Parcel使用场景受限</h3><p>目前Parcel<strong>只能用来构建用于运行在浏览器中的网页</strong>，这也是他的出发点和专注点。<br>在软件行业不可能存在即使用简单又可以适应各种场景的方案，就算所谓的人工智能也许能解决这个问题，但人工智能不能保证100%的正确性。</p>
+<p>反观Webpack除了用于构建网页，还可以做：</p>
+<ul>
+<li><a href="http://webpack.wuhaolin.cn/3%E5%AE%9E%E6%88%98/3-13%E6%9E%84%E5%BB%BANpm%E6%A8%A1%E5%9D%97.html" target="_blank" rel="noopener">打包发布到Npm上的库</a></li>
+<li><a href="http://webpack.wuhaolin.cn/3%E5%AE%9E%E6%88%98/3-11%E6%9E%84%E5%BB%BA%E5%90%8C%E6%9E%84%E5%BA%94%E7%94%A8.html" target="_blank" rel="noopener">构建Node.js应用(同构应用)</a></li>
+<li><a href="http://webpack.wuhaolin.cn/3%E5%AE%9E%E6%88%98/3-12%E6%9E%84%E5%BB%BAElectron%E5%BA%94%E7%94%A8.html" target="_blank" rel="noopener">构建Electron应用</a></li>
+<li><a href="http://webpack.wuhaolin.cn/3%E5%AE%9E%E6%88%98/3-14%E6%9E%84%E5%BB%BA%E7%A6%BB%E7%BA%BF%E5%BA%94%E7%94%A8.html" target="_blank" rel="noopener">构建离线应用(ServiceWorkers)</a></li>
+</ul>
+<h3 id="构建速度和输出文件大小对比"><a href="#构建速度和输出文件大小对比" class="headerlink" title="构建速度和输出文件大小对比"></a>构建速度和输出文件大小对比</h3><p>分别去用Parcel和Webpack构建以上项目，收集的数据如下：</p>
+<table>
+<thead>
+<tr>
+<th>数据项</th>
+<th>Parcel</th>
+<th>Webpack</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>生成环境构建时间</td>
+<td>8.310s</td>
+<td>9.58s</td>
+</tr>
+<tr>
+<td>开发环境启动时间</td>
+<td>5.42s</td>
+<td>8.06s</td>
+</tr>
+<tr>
+<td>监听变化构建时间</td>
+<td>3.17s</td>
+<td>2.87s</td>
+</tr>
+<tr>
+<td>生成环境输出JS文件大小</td>
+<td>544K</td>
+<td>274K</td>
+</tr>
+<tr>
+<td>生成环境输出CSS文件大小</td>
+<td>23K</td>
+<td>23K</td>
+</tr>
+</tbody>
+</table>
+<p>从以上数据可以看出：<strong>Parcel构建速度快，但Parcel输出文件大</strong></p>
+<p>导致Parcel构建速度快的原因和iOS比Android用起来更流畅的原因类似：</p>
+<ul>
+<li>Parcel因为一体化内置，所以集成和优化的更好，而Webpack通过插件和Loader机制去让第三方扩展这会拉低性能；</li>
+<li>Parcel内置多进程并行构建，而Webpack默认是单进程构建（<a href="http://webpack.wuhaolin.cn/4%E4%BC%98%E5%8C%96/4-3%E4%BD%BF%E7%94%A8HappyPack.html" target="_blank" rel="noopener">Webpack也支持多进程</a>）；</li>
+</ul>
+<p>导致Parcel输出JS文件大的原因在于：</p>
+<ul>
+<li>不支持TreeShaking </li>
+<li>构建出的JS中出现了所有文件的名称，如图：<br>  <img src="https://user-images.githubusercontent.com/5773264/34382680-8bd638e0-eb4b-11e7-9edf-9cbdf5c36b93.png" alt=""></li>
+</ul>
+<blockquote>
+<p>以上<a href="https://github.com/gwuhaolin/parcel-vs-webpack" target="_blank" rel="noopener">项目完整源码可下载</a></p>
+</blockquote>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>现阶段的Parcel就像beta版的iPhone，看上去很美好但还不能用于生成环境，如果你现在就把Parcel用于生成环境，相信我你一定会踩很多坑。<br>踩坑不要紧，要命的是无法在网上找到解决方法以快速解决问题。</p>
+<p>我不是不鼓励大家使用Parcel，历史总需要先驱去推动，就像乔布斯义无反顾的引领了一个时代，我们也需要去实践Parcel，坑都是一个个填平的，所以我鼓励大家在一些个人小项目中使用Parcel。</p>
+<p>如果Parcel能解决上面提到的这些问题，我会毫不犹豫的在我的下一个项目中使用他。</p>
+<p><a href="http://wuhaolin.cn/2017/12/27/Parcel%20Vs%20Webpack/">阅读原文</a></p>
+
+
+                <hr>
+
+                 <a href="https://github.com/gwuhaolin/blog/issues/13">在 Github 上讨论</a>
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2018/08/11/加速 Webpack/" data-toggle="tooltip" data-placement="top" title="加速 Webpack">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/11/03/你也能写个 Shadowsocks/" data-toggle="tooltip" data-placement="top" title="你也能写个 Shadowsocks">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#webpack" title="webpack">webpack</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/wu-hao-lin-67-15">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+
+                    
+
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/gwuhaolin">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 浩麟的博客 2018
+                    <br>
+                    Ported by <a href="https://github.com/gwuhaolin">gwuhaolin</a> |
+                    <iframe
+                            style="margin-left: 2px; margin-bottom:-5px;"
+                            frameborder="0" scrolling="0" width="91px" height="20px"
+                            src="https://ghbtns.com/github-btn.html?user=gwuhaolin&repo=blog&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) {
+            o.addEventListener('load', function (e) {
+                c(null, e);
+            }, false);
+        }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if ($('#tag_cloud').length !== 0) {
+        async("https://wuhaolin.cn/js/jquery.tagcloud.js", function () {
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-54964850-1';
+    var _gaDomain = 'wuhaolin.cn';
+
+    // Originial
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Side Catalog -->
+
+
+<!--Google Auto AD-->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-9697944574373240",
+        enable_page_level_ads: true
+    });
+</script>
+
+
+<!-- Image to hack wechat -->
+<img src="https://wuhaolin.cn /img/icon_wechat.png" width="0" height="0"/>
+<!-- Migrate from head to bottom, no longer block render and still work -->
+</body>
+
+</html>
