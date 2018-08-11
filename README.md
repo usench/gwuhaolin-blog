@@ -6,6 +6,7 @@
 - [webpack原理与实战](https://github.com/gwuhaolin/blog/issues/4)
 - [webpack2 终极优化](https://github.com/gwuhaolin/blog/issues/2)
 - [Parcel Vs Webpack](https://github.com/gwuhaolin/blog/issues/13)
+- [加速 Webpack](https://github.com/gwuhaolin/blog/issues/16)
 
 ### 音视频
 - [使用flv.js做直播](https://github.com/gwuhaolin/blog/issues/3)
@@ -21,6 +22,9 @@
 ### 网络
 - [调试利器-SSH隧道](https://github.com/gwuhaolin/blog/issues/11)
 - [你也能写个 Shadowsocks](https://github.com/gwuhaolin/blog/issues/12)
+
+### 编程语言
+- [WebAssembly 现状与实战](https://github.com/gwuhaolin/blog/issues/17)
 
 ## 注意
 - 正文见 [Issues](https://github.com/gwuhaolin/blog/issues)
