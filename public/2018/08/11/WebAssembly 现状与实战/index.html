@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          WebAssembly 现状与实战 - 浩麟的博客
+        
+    </title>
+
+    <link rel="canonical" href="https://wuhaolin.cn/2018/08/11/WebAssembly 现状与实战/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">浩麟的博客</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">归档</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">关于</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">标签</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+<!-- Main Content -->
+
+<!-- Image to hack wechat -->
+<!-- <img src="https://wuhaolin.cn/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#编程语言" title="编程语言">编程语言</a>
+                        
+                    </div>
+                    <h1>WebAssembly 现状与实战</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by 吴浩麟 on
+                        2018-08-11
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <blockquote>
+<p>本文首发于<a href="https://www.ibm.com/developerworks/cn/web/wa-lo-webassembly-status-and-reality/index.html" target="_blank" rel="noopener">IBM Dev社区</a></p>
+</blockquote>
+<h2 id="为什么需要-WebAssembly"><a href="#为什么需要-WebAssembly" class="headerlink" title="为什么需要 WebAssembly"></a>为什么需要 WebAssembly</h2><p>自从 JavaScript 诞生起到现在已经变成最流行的编程语言，这背后正是 Web 的发展所推动的。Web 应用变得更多更复杂，但这也渐渐暴露出了 JavaScript 的问题：</p>
+<ul>
+<li>语法太灵活导致开发大型 Web 项目困难；</li>
+<li>性能不能满足一些场景的需要。</li>
+</ul>
+<p>针对以上两点缺陷，近年来出现了一些 JS 的代替语言，例如：</p>
+<ul>
+<li>微软的<a href="http://www.typescriptlang.org/" target="_blank" rel="noopener"> TypeScript </a>通过为 JS 加入静态类型检查来改进 JS 松散的语法，提升代码健壮性；</li>
+<li>谷歌的<a href="https://www.dartlang.org/" target="_blank" rel="noopener"> Dart </a>则是为浏览器引入新的虚拟机去直接运行 Dart 程序以提升性能；</li>
+<li>火狐的<a href="http://asmjs.org/" target="_blank" rel="noopener"> asm.js </a>则是取 JS 的子集，JS 引擎针对 asm.js 做性能优化。</li>
+</ul>
+<p>以上尝试各有优缺点，其中：</p>
+<ul>
+<li>TypeScript 只是解决了 JS 语法松散的问题，最后还是需要编译成 JS 去运行，对性能没有提升；</li>
+<li>Dart 只能在 Chrome 预览版中运行，无主流浏览器支持，用 Dart 开发的人不多；</li>
+<li>asm.js 语法太简单、有很大限制，开发效率低。</li>
+</ul>
+<p>三大浏览器巨头分别提出了自己的解决方案，互不兼容，这违背了 Web 的宗旨； 是技术的规范统一让 Web 走到了今天，因此形成一套新的规范去解决 JS 所面临的问题迫在眉睫。</p>
+<p>于是 WebAssembly 诞生了，WebAssembly 是一种新的字节码格式，主流浏览器都已经支持 WebAssembly。 和 JS 需要解释执行不同的是，WebAssembly 字节码和底层机器码很相似可快速装载运行，因此性能相对于 JS 解释执行大大提升。 也就是说 WebAssembly 并不是一门编程语言，而是一份字节码标准，需要用高级编程语言编译出字节码放到 WebAssembly 虚拟机中才能运行， 浏览器厂商需要做的就是根据 WebAssembly 规范实现虚拟机。</p>
+<h2 id="WebAssembly-原理"><a href="#WebAssembly-原理" class="headerlink" title="WebAssembly 原理"></a>WebAssembly 原理</h2><p>要搞懂 WebAssembly 的原理，需要先搞懂计算机的运行原理。 电子计算机都是由电子元件组成，为了方便处理电子元件只存在开闭两种状态，对应着 0 和 1，也就是说计算机只认识 0 和 1，数据和逻辑都需要由 0 和 1 表示，也就是可以直接装载到计算机中运行的机器码。 机器码可读性极差，因此人们通过高级语言 C、C++、Rust、Go 等编写再编译成机器码。</p>
+<p>由于不同的计算机 CPU 架构不同，机器码标准也有所差别，常见的 CPU 架构包括 x86、AMD64、ARM， 因此在由高级编程语言编译成可自行代码时需要指定目标架构。</p>
+<p>WebAssembly 字节码是一种抹平了不同 CPU 架构的机器码，WebAssembly 字节码不能直接在任何一种 CPU 架构上运行， 但由于非常接近机器码，可以非常快的被翻译为对应架构的机器码，因此 WebAssembly 运行速度和机器码接近，这听上去非常像 Java 字节码。</p>
+<p>相对于 JS，WebAssembly 有如下优点：</p>
+<ul>
+<li>体积小：由于浏览器运行时只加载编译成的字节码，一样的逻辑比用字符串描述的 JS 文件体积要小很多；</li>
+<li>加载快：由于文件体积小，再加上无需解释执行，WebAssembly 能更快的加载并实例化，减少运行前的等待时间；</li>
+<li>兼容性问题少：WebAssembly 是非常底层的字节码规范，制订好后很少变动，就算以后发生变化,也只需在从高级语言编译成字节码过程中做兼容。可能出现兼容性问题的地方在于 JS 和 WebAssembly 桥接的 JS 接口。</li>
+</ul>
+<p>每个高级语言都去实现源码到不同平台的机器码的转换工作是重复的，高级语言只需要生成底层虚拟机(LLVM)认识的中间语言(LLVM IR)，<a href="https://llvm.org/" target="_blank" rel="noopener">LLVM </a>能实现：</p>
+<ul>
+<li>LLVM IR 到不同 CPU 架构机器码的生成；</li>
+<li>机器码编译时性能和大小优化。</li>
+</ul>
+<p>除此之外 LLVM 还实现了 LLVM IR 到 WebAssembly 字节码的编译功能，也就是说只要高级语言能转换成 LLVM IR，就能被编译成 WebAssembly 字节码，目前能编译成 WebAssembly 字节码的高级语言有：</p>
+<ul>
+<li><a href="https://github.com/AssemblyScript/assemblyscript" target="_blank" rel="noopener">AssemblyScript</a>:语法和 TypeScript 一致，对前端来说学习成本低，为前端编写 WebAssembly 最佳选择；</li>
+<li>c\c++:官方推荐的方式，详细使用见<a href="http://webassembly.org.cn/getting-started/developers-guide/" target="_blank" rel="noopener">文档</a>;</li>
+<li><a href="https://www.rust-lang.org/" target="_blank" rel="noopener">Rust</a>:语法复杂、学习成本高，对前端来说可能会不适应。详细使用见<a href="https://github.com/rust-lang-nursery/rust-wasm" target="_blank" rel="noopener">文档</a>;</li>
+<li><a href="http://kotlinlang.org/" target="_blank" rel="noopener">Kotlin</a>:语法和 Java、JS 相似，语言学习成本低，详细使用见<a href="https://kotlinlang.org/docs/reference/native-overview.html" target="_blank" rel="noopener">文档</a>;</li>
+<li><a href="https://golang.org/" target="_blank" rel="noopener">Golang</a>:语法简单学习成本低。但对 WebAssembly 的支持还处于未正式发布阶段，详细使用见<a href="https://blog.gopheracademy.com/advent-2017/go-wasm/" target="_blank" rel="noopener">文档</a>。</li>
+</ul>
+<p>通常负责把高级语言翻译到 LLVM IR 的部分叫做编译器前端，把 LLVM IR 编译成各架构 CPU 对应机器码的部分叫做编译器后端； 现在越来越多的高级编程语言选择 LLVM 作为后端，高级语言只需专注于如何提供开发效率更高的语法同时保持翻译到 LLVM IR 的程序执行性能。</p>
+<h2 id="编写-WebAssembly"><a href="#编写-WebAssembly" class="headerlink" title="编写 WebAssembly"></a>编写 WebAssembly</h2><h3 id="AssemblyScript-初体验"><a href="#AssemblyScript-初体验" class="headerlink" title="AssemblyScript 初体验"></a>AssemblyScript 初体验</h3><p>接下来详细介绍如何使用 AssemblyScript 来编写 WebAssembly，实现斐波那契序列的计算。 用 TypeScript 实现斐波那契序列计算的模块 f.ts 如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x: i32</span>): <span class="title">i32</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x === <span class="number">1</span> || x === <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> f(x - <span class="number">1</span>) + f(x - <span class="number">2</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在按照 <a href="https://github.com/AssemblyScript/assemblyscript#installation" target="_blank" rel="noopener">AssemblyScript 提供的安装教程</a>成功安装后， 再通过</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">asc f.ts -o f.wasm</span><br></pre></td></tr></table></figure>
+<p>就能把以上代码编译成可运行的 WebAssembly 模块。</p>
+<p>为了加载并执行编译出的 f.wasm 模块，需要通过 JS 去加载并调用模块上的 f 函数，为此需要以下 JS 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fetch(<span class="string">'f.wasm'</span>) <span class="comment">// 网络加载 f.wasm 文件</span></span><br><span class="line">    .then(<span class="function"><span class="params">res</span> =&gt;</span> res.arrayBuffer()) <span class="comment">// 转成 ArrayBuffer</span></span><br><span class="line">    .then(WebAssembly.instantiate) <span class="comment">// 编译为当前 CPU 架构的机器码 + 实例化</span></span><br><span class="line">    .then(<span class="function"><span class="params">mod</span> =&gt;</span> &#123; <span class="comment">// 调用模块实例上的 f 函数计算</span></span><br><span class="line">    <span class="built_in">console</span>.log(mod.instance.f(<span class="number">50</span>));</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<p>以上代码中出现了一个新的内置类型 i32，这是 AssemblyScript 在 TypeScript 的基础上内置的类型。 AssemblyScript 和 TypeScript 有细微区别，AssemblyScript 是 TypeScript 的子集，为了方便编译成 WebAssembly 在 TypeScript 的基础上加了更严格的<a href="https://github.com/AssemblyScript/assemblyscript/wiki/Limitations" target="_blank" rel="noopener">类型限制</a>， 区别如下：</p>
+<ul>
+<li>比 TypeScript 多了很多更细致的内置类型，以优化性能和内存占用，详情<a href="https://github.com/AssemblyScript/assemblyscript/wiki/Types" target="_blank" rel="noopener">文档</a>;</li>
+<li>不能使用 any 和 undefined 类型，以及枚举类型；</li>
+<li>可空类型的变量必须是引用类型，而不能是基本数据类型如 string、number、boolean；</li>
+<li>函数中的可选参数必须提供默认值，函数必须有返回类型，无返回值的函数返回类型需要是 void；</li>
+<li>不能使用 JS 环境中的内置函数，只能使用 <a href="https://github.com/AssemblyScript/assemblyscript/wiki/Built-in-functions" target="_blank" rel="noopener">AssemblyScript 提供的内置函数</a>。</li>
+</ul>
+<p>总体来说 AssemblyScript 比 TypeScript 又多了很多限制，编写起来会觉得局限性很大； 用 AssemblyScript 来写 WebAssembly 经常会出现 tsc 编译通过但运行 WebAssembly 时出错的情况，这很可能就是你没有遵守以上限制导致的；但 AssemblyScript 通过修改 TypeScript 编译器默认配置能在编译阶段找出大多错误。</p>
+<p>AssemblyScript 的实现原理其实也借助了 LLVM，它通过 TypeScript 编译器把 TS 源码解析成 AST，再把 AST 翻译成 IR，再通过 LLVM 编译成 WebAssembly 字节码实现； 上面提到的各种限制都是为了方便把 AST 转换成 LLVM IR。</p>
+<h3 id="为什么选-AssemblyScript-作为-WebAssembly-开发语言"><a href="#为什么选-AssemblyScript-作为-WebAssembly-开发语言" class="headerlink" title="为什么选 AssemblyScript 作为 WebAssembly 开发语言"></a>为什么选 AssemblyScript 作为 WebAssembly 开发语言</h3><p>AssemblyScript 相对于 C、Rust 等其它语言去写 WebAssembly 而言，好处除了对前端来说无额外新语言学习成本外，还有对于不支持 WebAssembly 的浏览器，可以通过 TypeScript 编译器编译成可正常执行的 JS 代码，从而实现从 JS 到 WebAssembly 的平滑迁移。</p>
+<h3 id="接入-Webpack-构建"><a href="#接入-Webpack-构建" class="headerlink" title="接入 Webpack 构建"></a>接入 Webpack 构建</h3><p>任何新的 Web 开发技术都少不了构建流程，为了提供一套流畅的 WebAssembly 开发流程，接下来介绍接入 Webpack 具体步骤。</p>
+<ol>
+<li><p>安装以下依赖，以便让 TS 源码被 AssemblyScript 编译成 WebAssembly。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="string">"assemblyscript"</span>: <span class="string">"github:AssemblyScript/assemblyscript"</span>,</span><br><span class="line">    <span class="string">"assemblyscript-typescript-loader"</span>: <span class="string">"^1.3.2"</span>,</span><br><span class="line">    <span class="string">"typescript"</span>: <span class="string">"^2.8.1"</span>,</span><br><span class="line">    <span class="string">"webpack"</span>: <span class="string">"^3.10.0"</span>,</span><br><span class="line">    <span class="string">"webpack-dev-server"</span>: <span class="string">"^2.10.1"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol>
+<li><p>修改 webpack.config.js，加入 loader：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">module.exports = &#123;</span><br><span class="line">    module: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: /\.ts$/,</span><br><span class="line">                loader: &apos;assemblyscript-typescript-loader&apos;,</span><br><span class="line">                options: &#123;</span><br><span class="line">                    sourceMap: true,</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol>
+<li><p>修改 TypeScript 编译器配置 tsconfig.json，以便让 TypeScript 编译器能支持 AssemblyScript 中引入的内置类型和函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;extends&quot;: &quot;../../node_modules/assemblyscript/std/portable.json&quot;,</span><br><span class="line">  &quot;include&quot;: [</span><br><span class="line">    &quot;./**/*.ts&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置直接继承自 assemblyscript 内置的配置文件。</p>
+</li>
+</ol>
+<h2 id="WebAssembly-相关文件格式"><a href="#WebAssembly-相关文件格式" class="headerlink" title="WebAssembly 相关文件格式"></a>WebAssembly 相关文件格式</h2><p>前面提到了 WebAssembly 的二进制文件格式 wasm，这种格式的文件人眼无法阅读，为了阅读 WebAssembly 文件的逻辑，还有一种文本格式叫 wast； 以前面讲到的计算斐波那契序列的模块为例，对应的 wast 文件如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">func $src/asm/module/f (param f64) (result f64)</span><br><span class="line">(local i32)</span><br><span class="line">  get_local 0</span><br><span class="line">  f64.const 1</span><br><span class="line">  f64.eq</span><br><span class="line">  tee_local 1</span><br><span class="line">  if i32</span><br><span class="line">    get_local 1</span><br><span class="line">  else</span><br><span class="line">    get_local 0</span><br><span class="line">    f64.const 2</span><br><span class="line">    f64.eq</span><br><span class="line">  end</span><br><span class="line">  i32.const 1</span><br><span class="line">  i32.and</span><br><span class="line">  if</span><br><span class="line">    f64.const 1</span><br><span class="line">    return</span><br><span class="line">  end</span><br><span class="line">  get_local 0</span><br><span class="line">  f64.const 1</span><br><span class="line">  f64.sub</span><br><span class="line">  call 0</span><br><span class="line">  get_local 0</span><br><span class="line">  f64.const 2</span><br><span class="line">  f64.sub</span><br><span class="line">  call 0</span><br><span class="line">  f64.add</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>这和汇编语言非常像，里面的 f64 是数据类型，f64.eq f64.sub f64.add 则是 CPU 指令。</p>
+<p>为了把二进制文件格式 wasm 转换成人眼可见的 wast 文本，需要安装 WebAssembly 二进制工具箱<a href="https://github.com/WebAssembly/wabt" target="_blank" rel="noopener">WABT</a>， 在 Mac 系统下可通过 brew install WABT 安装，安装成功后可以通过命令 wasm2wast f.wasm 获得 wast；除此之外还可以通过 wast2wasm f.wast -o f.wasm 逆向转换回去。</p>
+<h2 id="WebAssembly-相关工具"><a href="#WebAssembly-相关工具" class="headerlink" title="WebAssembly 相关工具"></a>WebAssembly 相关工具</h2><p>除了前面提到的 WebAssembly 二进制工具箱，WebAssembly 社区还有以下常用工具：</p>
+<ul>
+<li><a href="http://kripken.github.io/emscripten-site/" target="_blank" rel="noopener">Emscripten</a>: 能把 C、C++代码转换成 wasm、asm.js；</li>
+<li><a href="https://github.com/WebAssembly/binaryen" target="_blank" rel="noopener">Binaryen</a>: 提供更简洁的 IR，把 IR 转换成 wasm，并且提供 wasm 的编译时优化、wasm 虚拟机，wasm 压缩等功能，前面提到的 AssemblyScript 就是基于它。</li>
+</ul>
+<h2 id="WebAssembly-JS-API"><a href="#WebAssembly-JS-API" class="headerlink" title="WebAssembly JS API"></a>WebAssembly JS API</h2><p>目前 WebAssembly 只能通过 JS 去加载和执行，但未来在浏览器中可以通过像加载 JS 那样 <script src="f.wasm"></script> 去加载和执行 WebAssembly，下面来详细介绍如何用 JS 调 WebAssembly。</p>
+<p>JS 调 WebAssembly 分为 3 大步：<strong>加载字节码 &gt; 编译字节码 &gt; 实例化</strong>，获取到 WebAssembly 实例后就可以通过 JS 去调用了，以上 3 步具体的操作是：</p>
+<ol>
+<li>对于浏览器可以通过网络请求去加载字节码，对于 Nodejs 可以通过 fs 模块读取字节码文件；</li>
+<li>在获取到字节码后都需要转换成 ArrayBuffer 后才能被编译，通过 WebAssembly 通过的 JS API <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/compile" target="_blank" rel="noopener">WebAssembly.compile</a> 编译后会通过 Promise resolve 一个 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Module" target="_blank" rel="noopener">WebAssembly.Module</a>，这个 module 是不能直接被调用的需要；</li>
+<li>在获取到 module 后需要通过<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Instance" target="_blank" rel="noopener"> WebAssembly.Instance</a> API 去实例化 module，获取到 Instance 后就可以像使用 JS 模块一个调用了。</li>
+</ol>
+<p>其中的第 2、3 步可以合并一步完成，前面提到的 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/instantiate" target="_blank" rel="noopener">WebAssembly.instantiate</a> 就做了这两个事情。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WebAssembly.instantiate(bytes).then(<span class="function"><span class="params">mod</span>=&gt;</span>&#123;</span><br><span class="line">  mod.instance.f(<span class="number">50</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="WebAssembly-调-JS"><a href="#WebAssembly-调-JS" class="headerlink" title="WebAssembly 调 JS"></a>WebAssembly 调 JS</h3><p>之前的例子都是用 JS 去调用 WebAssembly 模块，但是在有些场景下可能需要在 WebAssembly 模块中调用浏览器 API，接下来介绍如何在 WebAssembly 中调用 JS。</p>
+<p>WebAssembly.instantiate 函数支持第二个参数 WebAssembly.instantiate(bytes,importObject)，这个 importObject 参数的作用就是 JS 向 WebAssembly 传入 WebAssembly 中需要调用 JS 的 JS 模块。举个具体的例子，改造前面的计算斐波那契序列在 WebAssembly 中调用 Web 中的 window.alert 函数把计算结果弹出来，为此需要改造加载 WebAssembly 模块的 JS 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">WebAssembly.instantiate(bytes,&#123;</span><br><span class="line">  <span class="built_in">window</span>:&#123;</span><br><span class="line">    alert:<span class="built_in">window</span>.alert</span><br><span class="line">  &#125;</span><br><span class="line">&#125;).then(<span class="function"><span class="params">mod</span>=&gt;</span>&#123;</span><br><span class="line">  mod.instance.f(<span class="number">50</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>对应的还需要修改 AssemblyScript 编写的源码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 声明从外部导入的模块类型</span></span><br><span class="line">declare namespace <span class="built_in">window</span> &#123;</span><br><span class="line">    <span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">alert</span>(<span class="params">v: number</span>): <span class="title">void</span>;</span></span><br><span class="line"><span class="function">&#125;</span></span><br><span class="line"><span class="function"> </span></span><br><span class="line"><span class="function"><span class="title">function</span> <span class="title">_f</span>(<span class="params">x: number</span>): <span class="title">number</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x == <span class="number">1</span> || x == <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> _f(x - <span class="number">1</span>) + _f(x - <span class="number">2</span>)</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x: number</span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 直接调用 JS 模块</span></span><br><span class="line">    <span class="built_in">window</span>.alert(_f(x));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改以上 AssemblyScript 源码后重新用 asc 通过命令 asc f.ts 编译后输出的 wast 文件比之前多了几行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(import &quot;window&quot; &quot;alert&quot; (func $src/asm/module/window.alert (type 0)))</span><br><span class="line"> </span><br><span class="line">(func $src/asm/module/f (type 0) (param f64)</span><br><span class="line">    get_local 0</span><br><span class="line">    call $src/asm/module/_f</span><br><span class="line">    call $src/asm/module/window.alert)</span><br></pre></td></tr></table></figure>
+<p>多出的这部分 wast 代码就是在 AssemblyScript 中调用 JS 中传入的模块的逻辑。</p>
+<p>除了以上常用的 API 外，WebAssembly 还提供一些 API，你可以通过这个<a href="https://github.com/01alchemist/webassembly-types/blob/master/webassembly.d.ts" target="_blank" rel="noopener"> d.ts 文件</a>去查看所有 WebAssembly JS API 的细节。</p>
+<h2 id="不止于浏览器"><a href="#不止于浏览器" class="headerlink" title="不止于浏览器"></a>不止于浏览器</h2><p>WebAssembly 作为一种底层字节码，除了能在浏览器中运行外，还能在其它环境运行。</p>
+<h3 id="直接执行-wasm-二进制文件"><a href="#直接执行-wasm-二进制文件" class="headerlink" title="直接执行 wasm 二进制文件"></a>直接执行 wasm 二进制文件</h3><p>前面提到的 Binaryen 提供了在命令行中直接执行 wasm 二进制文件的工具，在 Mac 系统下通过 brew install binaryen 安装成功后，通过 wasm-shell f.wasm 文件即可直接运行。</p>
+<h3 id="在-Node-js-中运行"><a href="#在-Node-js-中运行" class="headerlink" title="在 Node.js 中运行"></a>在 Node.js 中运行</h3><p>目前 V8 JS 引擎已经添加了对 WebAssembly 的支持，Chrome 和 Node.js 都采用了 V8 作为引擎，因此 WebAssembly 也可以运行在 Node.js 环境中；</p>
+<p>V8 JS 引擎在运行 WebAssembly 时，WebAssembly 和 JS 是在同一个虚拟机中执行，而不是 WebAssembly 在一个单独的虚拟机中运行，这样方便实现 JS 和 WebAssembly 之间的相互调用。</p>
+<p>要让上面的例子在 Node.js 中运行，可以使用以下代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">toUint8Array</span>(<span class="params">buf</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> u = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(buf.length);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; buf.length; ++i) &#123;</span><br><span class="line">        u[i] = buf[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> u;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">loadWebAssembly</span>(<span class="params">filename, imports</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 读取 wasm 文件，并转换成 byte 数组</span></span><br><span class="line">    <span class="keyword">const</span> buffer = toUint8Array(fs.readFileSync(filename));</span><br><span class="line">    <span class="comment">// 编译 wasm 字节码到机器码</span></span><br><span class="line">    <span class="keyword">return</span> WebAssembly.compile(buffer)</span><br><span class="line">        .then(<span class="function"><span class="params">module</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="comment">// 实例化模块</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> WebAssembly.Instance(<span class="built_in">module</span>, imports)</span><br><span class="line">        &#125;)</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">loadWebAssembly(<span class="string">'../temp/assembly/module.wasm'</span>)</span><br><span class="line">    .then(<span class="function"><span class="params">instance</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 调用 f 函数计算</span></span><br><span class="line">        <span class="built_in">console</span>.log(instance.exports.f(<span class="number">10</span>))</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<p>在 Nodejs 环境中运行 WebAssembly 的意义其实不大，原因在于 Nodejs 支持运行原生模块，而原生模块的性能比 WebAssembly 要好。 如果你是通过 C、Rust 去编写 WebAssembly，你可以直接编译成 Nodejs 可以调用的原生模块。</p>
+<h2 id="WebAssembly-展望"><a href="#WebAssembly-展望" class="headerlink" title="WebAssembly 展望"></a>WebAssembly 展望</h2><p>从上面的内容可见 WebAssembly 主要是为了解决 JS 的性能瓶颈，也就是说 WebAssembly 适合用于需要大量计算的场景，例如：</p>
+<ul>
+<li>在浏览器中处理音视频，<a href="https://github.com/Bilibili/flv.js/" target="_blank" rel="noopener">flv.js</a> 用 WebAssembly 重写后性能会有很大提升；</li>
+<li>React 的 dom diff 中涉及到大量计算，用 WebAssembly 重写 React 核心模块能提升性能。Safari 浏览器使用的 JS 引擎 JavaScriptCore 也已经支持 WebAssembly，RN 应用性能也能提升；</li>
+<li>突破大型 3D 网页游戏性能瓶颈，<a href="https://feday.fequan.com/2017/WebAssembly%E5%9C%A8%E7%99%BD%E9%B9%AD%E5%BC%95%E6%93%8E%E7%9A%84%E5%AE%9E%E8%B7%B5.pdf" target="_blank" rel="noopener">白鹭引擎已经开始探索用 WebAssembly</a>。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>WebAssembly 标准虽然已经定稿并且得到主流浏览器的实现，但目前还存在以下问题：</p>
+<ul>
+<li>浏览器兼容性不好，只有最新版本的浏览器支持，并且不同的浏览器对 JS WebAssembly 互调的 API 支持不一致；</li>
+<li>生态工具不完善不成熟，目前还不能找到一门体验流畅的编写 WebAssembly 的语言，都还处于起步阶段；</li>
+<li>学习资料太少，还需要更多的人去探索去踩坑。；</li>
+</ul>
+<p>总之现在的 WebAssembly 还不算成熟，如果你的团队没有不可容忍的性能问题，那现在使用 WebAssembly 到产品中还不是时候， 因为这可能会影响到团队的开发效率，或者遇到无法轻易解决的坑而阻塞开发。</p>
+<h2 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h2><ul>
+<li><a href="http://www.ruanyifeng.com/blog/2017/09/asmjs_emscripten.html" target="_blank" rel="noopener">asm.js 和 Emscripten 入门教程</a></li>
+<li><a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-clang/index.html" target="_blank" rel="noopener">结构化编译器前端 Clang 介绍</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/WebAssembly/Understanding_the_text_format" target="_blank" rel="noopener">理解 WebAssembly 文本格式</a></li>
+<li>[使用 WebAssembly JavaScript API</li>
+</ul>
+
+
+                <hr>
+
+                 <a href="https://github.com/gwuhaolin/blog/issues/17">在 Github 上讨论</a>
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/08/11/加速 Webpack/" data-toggle="tooltip" data-placement="top" title="加速 Webpack">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#编程语言" title="编程语言">编程语言</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/wu-hao-lin-67-15">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+
+                    
+
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/gwuhaolin">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 浩麟的博客 2018
+                    <br>
+                    Ported by <a href="https://github.com/gwuhaolin">gwuhaolin</a> |
+                    <iframe
+                            style="margin-left: 2px; margin-bottom:-5px;"
+                            frameborder="0" scrolling="0" width="91px" height="20px"
+                            src="https://ghbtns.com/github-btn.html?user=gwuhaolin&repo=blog&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) {
+            o.addEventListener('load', function (e) {
+                c(null, e);
+            }, false);
+        }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if ($('#tag_cloud').length !== 0) {
+        async("https://wuhaolin.cn/js/jquery.tagcloud.js", function () {
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-54964850-1';
+    var _gaDomain = 'wuhaolin.cn';
+
+    // Originial
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Side Catalog -->
+
+
+<!--Google Auto AD-->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-9697944574373240",
+        enable_page_level_ads: true
+    });
+</script>
+
+
+<!-- Image to hack wechat -->
+<img src="https://wuhaolin.cn /img/icon_wechat.png" width="0" height="0"/>
+<!-- Migrate from head to bottom, no longer block render and still work -->
+</body>
+
+</html>

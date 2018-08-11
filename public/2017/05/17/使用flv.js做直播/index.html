@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          使用flv.js做直播 - 浩麟的博客
+        
+    </title>
+
+    <link rel="canonical" href="https://wuhaolin.cn/2017/05/17/使用flv.js做直播/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">浩麟的博客</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">归档</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">关于</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">标签</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+<!-- Main Content -->
+
+<!-- Image to hack wechat -->
+<!-- <img src="https://wuhaolin.cn/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#音视频" title="音视频">音视频</a>
+                        
+                    </div>
+                    <h1>使用flv.js做直播</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by 吴浩麟 on
+                        2017-05-17
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>为什么要在这个时候探索flv.js做直播呢？原因在于各大浏览器厂商已经默认禁用Flash，之前常见的Flash直播方案需要用户同意使用Flash后才可以正常使用直播功能，这样的用户体验很致命。</p>
+<p>在介绍flv.js之前先介绍下常见的直播协议以及给出我对它们的延迟与性能所做的测试得出的数据。<br>如果你看的很吃力可以先了解下音视频技术的一些<a href="https://github.com/gwuhaolin/blog/issues/5" target="_blank" rel="noopener">基础概念</a>。</p>
+<h2 id="常见直播协议"><a href="#常见直播协议" class="headerlink" title="常见直播协议"></a>常见直播协议</h2><ul>
+<li><strong>RTMP</strong>: 底层基于<code>TCP</code>，在浏览器端依赖Flash。</li>
+<li><strong>HTTP-FLV</strong>: 基于<code>HTTP</code>流式IO传输FLV，依赖浏览器支持播放FLV。</li>
+<li><strong>WebSocket-FLV</strong>: 基于<code>WebSocket</code>传输FLV，依赖浏览器支持播放FLV。<code>WebSocket</code>建立在<code>HTTP</code>之上，建立<code>WebSocket</code>连接前还要先建立<code>HTTP</code>连接。</li>
+<li><strong>HLS</strong>: Http Live Streaming，苹果提出基于<code>HTTP</code>的流媒体传输协议。<code>HTML5</code>可以直接打开播放。</li>
+<li><strong>RTP</strong>: 基于<code>UDP</code>，延迟1秒，浏览器不支持。</li>
+</ul>
+<h4 id="常见直播协议延迟与性能数据以下数据只做对比参考"><a href="#常见直播协议延迟与性能数据以下数据只做对比参考" class="headerlink" title="常见直播协议延迟与性能数据以下数据只做对比参考"></a>常见直播协议延迟与性能数据<sub><sup>以下数据只做对比参考</sup></sub></h4><table>
+<thead>
+<tr>
+<th>传输协议</th>
+<th>播放器</th>
+<th>延迟</th>
+<th>内存</th>
+<th>CPU</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RTMP</td>
+<td>Flash</td>
+<td>1s</td>
+<td>430M</td>
+<td>11%</td>
+</tr>
+<tr>
+<td>HTTP-FLV</td>
+<td>Video</td>
+<td>1s</td>
+<td>310M</td>
+<td>4.4%</td>
+</tr>
+<tr>
+<td>HLS</td>
+<td>Video</td>
+<td>20s</td>
+<td>205M</td>
+<td>3%</td>
+</tr>
+</tbody>
+</table>
+<p>在支持浏览器的协议里，延迟排序是：<br><strong>RTMP = HTTP-FLV = WebSocket-FLV  &lt; HLS</strong><br>而性能排序恰好相反：<br><strong>RTMP &gt; HTTP-FLV = WebSocket-FLV  &gt; HLS</strong><br>也就是说延迟小的性能不好。</p>
+<p>可以看出在浏览器里做直播，使用HTTP-FLV协议是不错的，性能优于RTMP+Flash，延迟可以做到和RTMP+Flash一样甚至更好。</p>
+<h2 id="flv-js-简介"><a href="#flv-js-简介" class="headerlink" title="flv.js 简介"></a>flv.js 简介</h2><p>flv.js是来自Bilibli的开源项目。它解析FLV文件喂给原生HTML5 Video标签播放音视频数据，使浏览器在不借助Flash的情况下播放FLV成为可能。</p>
+<h2 id="flv-js-优势"><a href="#flv-js-优势" class="headerlink" title="flv.js 优势"></a>flv.js 优势</h2><ul>
+<li>由于浏览器对原生Video标签采用了硬件加速，性能很好，支持高清。</li>
+<li>同时支持录播和直播</li>
+<li>去掉对Flash的依赖</li>
+</ul>
+<h2 id="flv-js-限制"><a href="#flv-js-限制" class="headerlink" title="flv.js 限制"></a>flv.js 限制</h2><ul>
+<li>FLV里所包含的视频编码必须是<code>H.264</code>，音频编码必须是<code>AAC</code>或<code>MP3</code>， IE11和Edge浏览器不支持MP3音频编码，所以FLV里采用的编码最好是H.264+AAC，这个让音视频服务兼容不是问题。</li>
+<li>对于录播，依赖 <code>原生HTML5 Video标签</code> 和 <a href="https://w3c.github.io/media-source/" target="_blank" rel="noopener">Media Source Extensions</a> API</li>
+<li>对于直播，依赖录播所需要的播放技术，同时依赖 <code>HTTP FLV</code> 或者 <code>WebSocket</code> 中的一种协议来传输FLV。其中<code>HTTP FLV</code>需通过流式IO去拉取数据，支持流式IO的有<a href="https://fetch.spec.whatwg.org" target="_blank" rel="noopener">fetch</a>或者<a href="https://streams.spec.whatwg.org" target="_blank" rel="noopener">stream</a></li>
+<li><code>flv.min.js</code> 文件大小 164Kb，gzip后 35.5Kb，flash播放器gzip后差不多也是这么大。</li>
+<li>由于依赖<code>Media Source Extensions</code>，目前所有iOS和Android4.4.4以下里的浏览器都不支持，也就是说目前对于移动端flv.js基本是不能用的。</li>
+</ul>
+<h4 id="flv-js依赖的浏览器特性兼容列表"><a href="#flv-js依赖的浏览器特性兼容列表" class="headerlink" title="flv.js依赖的浏览器特性兼容列表"></a>flv.js依赖的浏览器特性兼容列表</h4><ul>
+<li><a href="http://caniuse.com/#feat=webm" target="_blank" rel="noopener">HTML5 Video</a></li>
+<li><a href="http://caniuse.com/#feat=mediasource" target="_blank" rel="noopener">Media Source Extensions</a></li>
+<li><a href="http://caniuse.com/#feat=websockets" target="_blank" rel="noopener">WebSocket</a></li>
+<li>HTTP FLV: <a href="http://caniuse.com/#feat=fetch" target="_blank" rel="noopener">fetch</a> 或 <a href="http://caniuse.com/#feat=http-live-streaming" target="_blank" rel="noopener">stream</a><h2 id="flv-js-原理"><a href="#flv-js-原理" class="headerlink" title="flv.js 原理"></a>flv.js 原理</h2>flv.js只做了一件事，在获取到FLV格式的音视频数据后通过原生的JS去解码FLV数据，再通过<a href="https://w3c.github.io/media-source/" target="_blank" rel="noopener">Media Source Extensions</a> API 喂给原生HTML5 Video标签。(HTML5 原生仅支持播放 mp4/webm 格式，不支持 FLV)</li>
+</ul>
+<p>flv.js 为什么要绕一圈，从服务器获取FLV再解码转换后再喂给Video标签呢？原因如下：</p>
+<ol>
+<li>兼容目前的直播方案：目前大多数直播方案的音视频服务都是采用FLV容器格式传输音视频数据。</li>
+<li>FLV容器格式相比于MP4格式更加简单，解析起来更快更方便。</li>
+</ol>
+<h2 id="flv-js兼容方案"><a href="#flv-js兼容方案" class="headerlink" title="flv.js兼容方案"></a>flv.js兼容方案</h2><p>由于目前flv.js兼容性还不是很好，要用在产品中必要要兼顾到不支持flv.js的浏览器。兼容方案如下：</p>
+<h4 id="PC端"><a href="#PC端" class="headerlink" title="PC端"></a>PC端</h4><ol>
+<li>优先使用 HTTP-FLV，因为它延迟小，性能也不差1080P都很流畅。</li>
+<li>不支持 flv.js 就使用 Flash播放器播 RTMP 流。Flash兼容性很好，但是性能差默认被很多浏览器禁用。</li>
+<li>不想用Flash兼容也可以用HLS，但是PC端只有Safari支持HLS<h4 id="移动端"><a href="#移动端" class="headerlink" title="移动端"></a>移动端</h4></li>
+<li>优先使用 HTTP-FLV，因为它延迟小，支持HTTP-FLV的设备性能运行 flv.js 足够了。</li>
+<li>不支持 flv.js 就使用 HLS，但是 HLS延迟非常大。</li>
+<li>HLS 也不支持就没法直播了，因为移动端都不支持Flash。</li>
+</ol>
+<h2 id="flv-js实战"><a href="#flv-js实战" class="headerlink" title="flv.js实战"></a>flv.js实战</h2><p>说了这么多介绍与原理，接下来教大家如何用flv.js搭建一个完整的直播系统。<br>我已经搭建好了<a href="http://rawgit.com/gwuhaolin/reflv/gh-pages/live.html" target="_blank" rel="noopener">一个demo</a>可以供大家体验。</p>
+<h4 id="搭建音视频服务"><a href="#搭建音视频服务" class="headerlink" title="搭建音视频服务"></a>搭建音视频服务</h4><p>主播推流到音视频服务，音视频服务再转发给所有连接的客户端。为了让你快速搭建服务推荐我用go语言实现的<a href="https://github.com/gwuhaolin/livego" target="_blank" rel="noopener">livego</a>，因为它可以运行在任何操作系统上，对Golang感兴趣？请看<a href="http://go.wuhaolin.cn/" target="_blank" rel="noopener">Golang 中文学习资料汇总</a>。</p>
+<ol>
+<li><a href="https://github.com/gwuhaolin/livego/releases" target="_blank" rel="noopener">下载livego</a>，注意选对你的操作系统和位数。</li>
+<li>解压，执行<code>livego</code>，服务就启动好了。它会启动RTMP(1935端口)服务用于主播推流，以及HTTP-FLV(7001端口)服务用于播放。<h4 id="实现播放页"><a href="#实现播放页" class="headerlink" title="实现播放页"></a>实现播放页</h4>在react体系里使用react flv.js 组件<a href="https://github.com/gwuhaolin/reflv" target="_blank" rel="noopener">reflv</a> 快速实现。<br>先安装<code>npm i reflv</code>，再写代码：<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; PureComponent &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> Reflv <span class="keyword">from</span> <span class="string">'reflv'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpFlv</span> <span class="keyword">extends</span> <span class="title">PureComponent</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;Reflv</span><br><span class="line">        url=&#123;<span class="string">`http://localhost:7001/live/test.flv`</span>&#125;</span><br><span class="line">        type=<span class="string">"flv"</span></span><br><span class="line">        isLive</span><br><span class="line">        cors</span><br><span class="line">      /&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>让以上代码在浏览器里运行。这是你还看不到直播，是因为还没有主播推流。</p>
+<ul>
+<li><p>你可以使用<a href="https://obsproject.com" target="_blank" rel="noopener">OBS</a>来推流，注意要配置好OBS：<br><img width="961" alt="screen shot 2017-06-07 at 5 41 32 pm" src="https://user-images.githubusercontent.com/5773264/26872300-9c1c5bb4-4ba8-11e7-98eb-98e6d6ba751f.png"></p>
+</li>
+<li><p>也可以使用<a href="https://ffmpeg.org" target="_blank" rel="noopener">ffmpeg</a>来推流，推流命令<code>ffmpeg -f avfoundation -i &quot;0&quot; -vcodec h264 -acodec aac -f flv rtmp://localhost/live/test</code></p>
+</li>
+</ul>
+<h2 id="flv-js延迟优化"><a href="#flv-js延迟优化" class="headerlink" title="flv.js延迟优化"></a>flv.js延迟优化</h2><p>按照上面的教程运行起来的直播延迟大概有3秒，经过优化可以到1秒。在教你怎么优化前先要介绍下直播运行流程：</p>
+<ol>
+<li><p>主播端在采集到一段时间的音视频原数据后，因为音视频原数据庞大需要先压缩数据：</p>
+<ul>
+<li>通过H264视频编码压缩数据数据</li>
+<li>通过PCM音频编码压缩音频AAC数据</li>
+</ul>
+</li>
+<li><p>压缩完后再通过FLV容器格式封装压缩后的数据，封装成一个FLV TAG</p>
+</li>
+<li>再把FLV TAG通过RTMP协议推流到音视频服务器，音视频服务器再从RTMP协议里解析出FLV TAG。</li>
+<li>音视频服务器再通过HTTP协议通过和浏览器建立的长链接流式把FLV TAG传给浏览器。</li>
+<li>flv.js 获取FLV TAG后解析出压缩后的音视频数据喂给Video播放。</li>
+</ol>
+<p>知道流程后我们就知道从哪入手优化了：</p>
+<ul>
+<li>主播端采集时收集了一段时间的音视频原数据，它专业的叫法是<a href="http://blog.csdn.net/zqj6893/article/details/50262189" target="_blank" rel="noopener">GOP</a>。缩短这个收集时间(也就是减少GOP长度)可以优化延迟，但这样做的坏处是导致视频压缩率不高，传输效率低。</li>
+<li>关闭音视频服务器的I桢缓存可以优化延迟，坏处是用户看到直播首屏的时间变大。</li>
+<li>减少音视频服务器的buffer可以优化延迟，坏处是音视频服务器处理效率降低。</li>
+<li>减少浏览器端flv.js的buffer可以优化延迟，坏处是浏览器端处理效率降低。</li>
+<li>浏览器端开启flv.js的Worker，多线程运行flv.js提升解析速度可以优化延迟，这样做的flv.js配置代码是：<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">          enableWorker: <span class="literal">true</span>,</span><br><span class="line">          enableStashBuffer: <span class="literal">false</span>,</span><br><span class="line">          stashInitialSize: <span class="number">128</span>,<span class="comment">// 减少首桢显示等待时长</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这里是<a href="https://github.com/gwuhaolin/reflv/blob/master/doc/live/http-flv.js" target="_blank" rel="noopener">优化后的完整代码</a></p>
+<p><a href="http://wuhaolin.cn/2017/05/17/%E4%BD%BF%E7%94%A8flv.js%E5%81%9A%E7%9B%B4%E6%92%AD/">阅读原文</a></p>
+
+
+                <hr>
+
+                 <a href="https://github.com/gwuhaolin/blog/issues/3">在 Github 上讨论</a>
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2017/05/31/webpack原理与实战/" data-toggle="tooltip" data-placement="top" title="webpack原理与实战">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/04/30/webpack2 终极优化/" data-toggle="tooltip" data-placement="top" title="webpack2 终极优化">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#音视频" title="音视频">音视频</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/wu-hao-lin-67-15">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+
+                    
+
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/gwuhaolin">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 浩麟的博客 2018
+                    <br>
+                    Ported by <a href="https://github.com/gwuhaolin">gwuhaolin</a> |
+                    <iframe
+                            style="margin-left: 2px; margin-bottom:-5px;"
+                            frameborder="0" scrolling="0" width="91px" height="20px"
+                            src="https://ghbtns.com/github-btn.html?user=gwuhaolin&repo=blog&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) {
+            o.addEventListener('load', function (e) {
+                c(null, e);
+            }, false);
+        }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if ($('#tag_cloud').length !== 0) {
+        async("https://wuhaolin.cn/js/jquery.tagcloud.js", function () {
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-54964850-1';
+    var _gaDomain = 'wuhaolin.cn';
+
+    // Originial
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Side Catalog -->
+
+
+<!--Google Auto AD-->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-9697944574373240",
+        enable_page_level_ads: true
+    });
+</script>
+
+
+<!-- Image to hack wechat -->
+<img src="https://wuhaolin.cn /img/icon_wechat.png" width="0" height="0"/>
+<!-- Migrate from head to bottom, no longer block render and still work -->
+</body>
+
+</html>

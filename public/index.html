@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          浩麟的博客
+        
+    </title>
+
+    <link rel="canonical" href="https://wuhaolin.cn/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">浩麟的博客</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">归档</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">关于</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">标签</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+<!-- Main Content -->
+<!-- Page Header -->
+<header class="intro-header" style="background-image: url('/img/bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+                <div class="site-heading">
+                    <h1>浩麟的博客</h1>
+                    <!--<hr class="small">-->
+                    <span class="subheading">实用、前沿、深入、原创</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Main Content -->
+<div class="container">
+
+    <div class="row">
+        
+
+<!-- USE SIDEBAR -->
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-1
+                col-md-8 col-md-offset-1
+                col-sm-12
+                col-xs-12
+                post-container
+            ">
+                <!-- Main Content -->
+
+
+<div class="post-preview">
+
+    <a href="/2018/08/11/WebAssembly 现状与实战/">
+        <h2 class="post-title">
+            WebAssembly 现状与实战
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+本文首发于IBM Dev社区
+
+为什么需要 WebAssembly自从 JavaScript 诞生起到现在已经变成最流行的编程语言，这背后正是 Web 的发展所推动的。Web 应用变得更多更复杂，但这也渐渐暴露出了 JavaScript 的问题：
+
+语法太灵活导致开发大型 Web 项目困难；
+性能不能满足一些场景的需要。
+
+针对以上两点缺陷，近年来出现了一些 JS 的代替语言，例如：
+
+微......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by 吴浩麟 on
+        2018-08-11
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2018/08/11/加速 Webpack/">
+        <h2 class="post-title">
+            加速 Webpack
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+本文首发于IBM Dev社区
+
+Web 应用日益复杂，相关开发技术也百花齐放，这对前端构建工具提出了更高的要求。 Webpack 从众多构建工具中脱颖而出成为目前最流行的构建工具，几乎成为目前前端开发里的必备工具之一。 大多数人在使用 Webpack 的过程中都会遇到构建速度慢的问题，在项目大时显得尤为突出，这极大的影响了我们的开发体验，降低了我们的开发效率。
+本文将传授你一些加速 Web......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by 吴浩麟 on
+        2018-08-11
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/12/27/Parcel Vs Webpack/">
+        <h2 class="post-title">
+            Parcel Vs Webpack
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+爱折腾的前端圈时常会有新轮子诞生，只要是好东西就能快速获得大量关注，资历再好的大哥只要不如新人也很快会被替代。
+
+横空出世的Parcel近日成为了前端圈的又一大热点，在短短几周内就获得了13K的Star。作为前端构建工具新人的Parcel为什么能在短期内获得这么多赞同？他和老大哥Webpack比起来到底有什么优势呢？
+我花了6个月的时间写了一本全面介绍Webpack的图书《深入浅出 Web......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by 吴浩麟 on
+        2017-12-27
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/11/03/你也能写个 Shadowsocks/">
+        <h2 class="post-title">
+            你也能写个 Shadowsocks
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            本文将教你从0写一个Shadowsocks，无需任何基础，读完本文你就能完成一个轻量级、高性能的 Shadowsocks 代替品。
+我们暂且把最终完成的项目叫做 Lightsocks，如果你很急切地想看到结果，可以先体验本文最终完成的项目 Lightsocks ，也可以下载阅读源码。
+认识 ShadowsocksShadowsocks 是一个能骗过防火墙的网络代理工具。它把要传输的原数据经过......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by 吴浩麟 on
+        2017-11-03
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/11/03/调试利器-SSH隧道/">
+        <h2 class="post-title">
+            调试利器-SSH隧道
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+在开发微信公众号或小程序的时候，由于微信平台规则的限制，部分接口需要通过线上域名才能正常访问。但我们一般都会在本地开发，因为这能快速的看到源码修改后的运行结果。但当涉及到需要调用微信接口时，由于不和你在同一个局域网中的用户是无法访问你的本地开发机的，就必须把修改后的代码重新发布到线上域名所在的服务器才能去验证结果。每次修改都重新发布很繁琐也很浪费时间。
+
+本文将教你如何通过 SSH 隧道把......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by 吴浩麟 on
+        2017-11-03
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/08/01/流媒体加密/">
+        <h2 class="post-title">
+            流媒体加密
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+本文只讨论应用于浏览器环境的流媒体协议的加密
+
+为什么要加密视频付费观看视频的模式是很多平台的核心业务，如果视频被录制并非法传播，付费业务将受到严重威胁。因此对视频服务进行加密的技术变得尤为重要。
+本文所指的视频加密是为了让要保护的视频不能轻易被下载，即使下载到了也是加密后的内容，其它人解开加密后的内容需要付出非常大的代价。
+无法做到严格的让要保护的视频不被录制，原因在于你需要在客户端播放......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by 吴浩麟 on
+        2017-08-01
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/06/27/使用HeadlessChrome做单页应用SEO/">
+        <h2 class="post-title">
+            使用HeadlessChrome做单页应用SEO
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+随着react、vue、angular等前端框架的流行越来越多的web应用变成了单页应用，它们的特点是异步拉取数据在浏览器中渲染出HTML。使用这些框架极大的提升web用户体验和开发效率的同时缺带来一个新问题，那就是这样的网页无法被搜索引擎收录。虽然这些web框架支持服务端渲染，但这可能又会增加开发成本。
+
+有没有一个可用于任何单页应用的SEO解决方案，让我们不用对代码做改变保持原有的开发......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by 吴浩麟 on
+        2017-06-27
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/06/26/基于HeadlessChrome的网页自动化测试系统-FinalTest/">
+        <h2 class="post-title">
+            基于HeadlessChrome的网页自动化测试系统-FinalTest
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            本文还未完成，还在不断补充中
+
+你的团队是不是遇到过网页出故障了无法第一时间知道只能等用户反馈后才知道出现了问题？我曾因为一次疏忽导致产品的一个页面不可用被批评，这让我难受低沉了一个星期。
+
+我总是追求合理高效的方法来解决我所遇到的问题，于是我幻想要是有一个工具可以智能的监视网页一旦出现异常就提醒我们该多好。就在出故障的几天后chrome团队宣布chrome支持headless模式，这让我很......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by 吴浩麟 on
+        2017-06-26
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/06/03/音视频技术参考资料/">
+        <h2 class="post-title">
+            音视频技术参考资料
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            入门与概念
+[总结]视音频编解码技术零基础学习方法
+入门启发：音视频的简单理解
+视频编码基础–帧的类型
+
+容器格式
+视音频编解码学习工程：FLV封装格式分析器
+
+传输协议
+RTMP协议规范
+带你吃透RTMP
+RTMP服务器的延迟，多级边缘不影响延迟，gop为最大因素
+
+编解码...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by 吴浩麟 on
+        2017-06-03
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/05/31/webpack原理与实战/">
+        <h2 class="post-title">
+            webpack原理与实战
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+webpack是一个js打包工具，不一个完整的前端构建工具。它的流行得益于模块化和单页应用的流行。webpack提供扩展机制，在庞大的社区支持下各种场景基本它都可找到解决方案。本文的目的是教会你用webpack解决实战中常见的问题。
+webpack原理在深入实战前先要知道webpack的运行原理
+webpack核心概念
+entry 一个可执行模块或库的入口文件。
+chunk 多个文件组成的......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by 吴浩麟 on
+        2017-05-31
+    </p>
+
+</div>
+<hr>
+
+
+
+<!-- Pager -->
+
+<ul class="pager">
+    
+    
+        <li class="next">
+            <a href="/page/2/">Older Posts &rarr;</a>
+        </li>
+    
+</ul>
+
+
+            </div>
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                            
+                            <a href="/tags/#webpack" title="webpack" rel="4">webpack</a>
+                            
+                        
+                            
+                            <a href="/tags/#chrome" title="chrome" rel="2">chrome</a>
+                            
+                        
+                            
+                        
+                            
+                            <a href="/tags/#音视频" title="音视频" rel="3">音视频</a>
+                            
+                        
+                            
+                            <a href="/tags/#网络" title="网络" rel="2">网络</a>
+                            
+                        
+                            
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Short About -->
+                <section class="visible-md visible-lg">
+                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
+                    <div class="short-about">
+
+                        
+
+                        
+
+                        <!-- SNS Link -->
+                        <ul class="list-inline">
+                            
+                            
+                            
+                                <li>
+                                    <a target="_blank" href="https://www.zhihu.com/people/wu-hao-lin-67-15">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa  fa-stack-1x fa-inverse">知</i>
+                                        </span>
+                                    </a>
+                                </li>
+                            
+
+                            
+
+                            
+
+                            
+                                <li>
+                                    <a target="_blank"  href="https://github.com/gwuhaolin">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                            
+                            
+                            
+                            
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- Friends Blog -->
+                
+            </div>
+        
+    </div>
+</div>
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/wu-hao-lin-67-15">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+
+                    
+
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/gwuhaolin">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 浩麟的博客 2018
+                    <br>
+                    Ported by <a href="https://github.com/gwuhaolin">gwuhaolin</a> |
+                    <iframe
+                            style="margin-left: 2px; margin-bottom:-5px;"
+                            frameborder="0" scrolling="0" width="91px" height="20px"
+                            src="https://ghbtns.com/github-btn.html?user=gwuhaolin&repo=blog&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) {
+            o.addEventListener('load', function (e) {
+                c(null, e);
+            }, false);
+        }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if ($('#tag_cloud').length !== 0) {
+        async("https://wuhaolin.cn/js/jquery.tagcloud.js", function () {
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-54964850-1';
+    var _gaDomain = 'wuhaolin.cn';
+
+    // Originial
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Side Catalog -->
+
+
+<!--Google Auto AD-->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-9697944574373240",
+        enable_page_level_ads: true
+    });
+</script>
+
+
+<!-- Image to hack wechat -->
+<img src="https://wuhaolin.cn /img/icon_wechat.png" width="0" height="0"/>
+<!-- Migrate from head to bottom, no longer block render and still work -->
+</body>
+
+</html>
