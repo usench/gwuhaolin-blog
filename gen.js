@@ -61,6 +61,7 @@ ${body}`;
     const hexo = new Hexo();
     hexo.init().then(function () {
         hexo.call('generate',{}).then(function () {
+            execSync(`rm -rf docs/public`);
             execSync(`mv public docs`);
             console.log('网站生成完毕');
             process.exit(0);

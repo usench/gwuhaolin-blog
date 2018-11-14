@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "pub": "node gen.js && git add docs && git commit -m 'update' && git push"
+    "pub": "node gen.js && git add . && git commit -m 'update' && git push"
   },
   "hexo": {
     "version": "3.5.0"

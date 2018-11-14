@@ -6,8 +6,6 @@ tags:
     - 编程语言
 ---
 
-> 本文首发于[IBM Dev社区](https://www.ibm.com/developerworks/cn/web/wa-lo-webassembly-status-and-reality/index.html)
-
 ## 为什么需要 WebAssembly
 
 自从 JavaScript 诞生起到现在已经变成最流行的编程语言，这背后正是 Web 的发展所推动的。Web 应用变得更多更复杂，但这也渐渐暴露出了 JavaScript 的问题：
@@ -350,4 +348,7 @@ WebAssembly 标准虽然已经定稿并且得到主流浏览器的实现，但�
 - [asm.js 和 Emscripten 入门教程](http://www.ruanyifeng.com/blog/2017/09/asmjs_emscripten.html)
 - [结构化编译器前端 Clang 介绍](https://www.ibm.com/developerworks/cn/opensource/os-cn-clang/index.html)
 - [理解 WebAssembly 文本格式](https://developer.mozilla.org/zh-CN/docs/WebAssembly/Understanding_the_text_format)
-- [使用 WebAssembly JavaScript API
+- [使用 WebAssembly JavaScript API](https://developer.mozilla.org/zh-CN/docs/WebAssembly/Using_the_JavaScript_API)
+
+
+> 本文首发于[IBM Dev社区](https://www.ibm.com/developerworks/cn/web/wa-lo-webassembly-status-and-reality/index.html)
