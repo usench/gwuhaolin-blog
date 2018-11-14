@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          ReactNative三端同构实战 - 浩麟的博客
+        
+    </title>
+
+    <link rel="canonical" href="https://wuhaolin.cn/2018/11/14/ReactNative三端同构实战/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">浩麟的博客</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">归档</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">关于</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">标签</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+<!-- Main Content -->
+
+<!-- Image to hack wechat -->
+<!-- <img src="https://wuhaolin.cn/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#react" title="react">react</a>
+                        
+                    </div>
+                    <h1>ReactNative三端同构实战</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by 吴浩麟 on
+                        2018-11-14
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="认识ReactNative三端同构"><a href="#认识ReactNative三端同构" class="headerlink" title="认识ReactNative三端同构"></a>认识ReactNative三端同构</h2><p>ReactNative三端同构是指在不改动原ReactNative的代码下，让其在浏览器中运行出和在ReactNative环境下一样的页面。</p>
+<p>ReactNative三端同构的应用场景包括：</p>
+<ul>
+<li>在ReactNative页面崩溃时用对应的Web页兜底，以保证用户可以正常使用页面；</li>
+<li>对于需要分享到社交网络的页面，例如需要分享到微信朋友圈、微博的页面，不可避免的需要Web网页。</li>
+</ul>
+<p>对于使用ReactNative开发的页面，如果又单独为Web平台重复写一份代码代价是极其大的，而ReactNative三端同构能以零花费快速做到一份代码三端复用。</p>
+<h2 id="ReactNative三端同构基础原理"><a href="#ReactNative三端同构基础原理" class="headerlink" title="ReactNative三端同构基础原理"></a>ReactNative三端同构基础原理</h2><p>ReactNative就像一套新的浏览器标准，ReactNative提供了大量内置的原生UI元素和系统API，对应着浏览器中的div、img等标签以及BOM API；但是ReactNative目前只专注于移动App平台，只适配了iOS和Android两大系统，而浏览器则是适配了各种操作系统，由于ReactNative需要适配的平台更少所以性能会比浏览器要好。</p>
+<p>我们编写的React组件经过render后会以虚拟DOM的形式存储在内存中，React只负责UI层面的抽象和组件的状态管理，各平台都可用虚拟DOM去渲染出不同的结果，React架构如下：</p>
+<p><img width="719" alt="react" src="https://user-images.githubusercontent.com/5773264/48459964-77f8a880-e807-11e8-9e5f-37f4145e7efe.png"></p>
+<p>由此可见虚拟DOM这层中间抽象在实现React渲染到多端时发挥了很大的作用。</p>
+<h2 id="ReactNative三端同构方案对比"><a href="#ReactNative三端同构方案对比" class="headerlink" title="ReactNative三端同构方案对比"></a>ReactNative三端同构方案对比</h2><p>目前社区中已经有多个ReactNative三端同构方案，比较成熟的有<a href="https://github.com/necolas/react-native-web" target="_blank" rel="noopener">react-native-web</a>和<a href="https://github.com/Microsoft/reactxp" target="_blank" rel="noopener">reactxp</a>，下来从多方面对比二者以帮助你做出合适的选择。</p>
+<h4 id="认识reactxp"><a href="#认识reactxp" class="headerlink" title="认识reactxp"></a>认识reactxp</h4><p>reactxp是一个跨平台的UI库，由微软Skype团队维护和开源，Skype产品中就大量使用了它来实现写一份代码运行在多个平台上。目前reactxp支持以下平台：</p>
+<ul>
+<li>iOS（基于react-native渲染）；</li>
+<li>Android（基于react-native渲染）；</li>
+<li>Web（基于react-dom渲染）；</li>
+<li><a href="https://en.wikipedia.org/wiki/Universal_Windows_Platform" target="_blank" rel="noopener">UWP</a> (基于<a href="https://github.com/Microsoft/react-native-windows" target="_blank" rel="noopener">react-native-windows</a>渲染)；</li>
+<li>对于剩下的平台，诸如Mac、Windows10以下系统、Linux桌面，则采用基于Web渲染的<a href="https://electron.atom.io/" target="_blank" rel="noopener">Electron</a>。</li>
+</ul>
+<h4 id="reactxp实现原理"><a href="#reactxp实现原理" class="headerlink" title="reactxp实现原理"></a>reactxp实现原理</h4><p>reactxp充份发挥了react虚拟DOM的优势，它其实只是充当胶水的作用，把各个平台的渲染引擎整合起来，对外暴露平台一致的接口。</p>
+<p>reactxp为各个平台都实现了一份代码，在构建的过程中构建工具会自动选择平台相关的代码进行打包输出。</p>
+<p><img src="https://user-images.githubusercontent.com/5773264/48459985-88a91e80-e807-11e8-81ee-8d5e0f3856eb.png" alt="reactxp arch"></p>
+<h4 id="reactxp和react-native的异同点"><a href="#reactxp和react-native的异同点" class="headerlink" title="reactxp和react-native的异同点"></a>reactxp和react-native的异同点</h4><p>从使用层面来说它们最大的区别在于：<strong>reactxp是为了一份代码在多个平台运行，而react-native是为了学一遍可为多个平台编写原生应用</strong>。</p>
+<p>这一点从reactxp和react-native暴露出的API就可以看出来：react-native中大量诸如SegmentedControlIOS、PermissionsAndroid这样针对特定平台的API，而reactxp中所有的API在所有端中都可以正常调用。</p>
+<p>事实上react-native也在为多端接口统一做努力，react-native中的大多数接口是可以在多端运行一致的，但为了保证灵活性react-native也提供了平台相关的接口。而reactxp磨平了多端接口的差异，但这也导致reactxp灵活性降低。</p>
+<p>他们的相同点是都采用了react框架编程的思想，由于reactxp是基于react-native封装的导致他们大多数API的使用方式都是一致的。</p>
+<h4 id="react-native-web原理"><a href="#react-native-web原理" class="headerlink" title="react-native-web原理"></a>react-native-web原理</h4><p>react-native-web实现了在不修改react-native代码的情况下渲染在浏览器里的功能，其实现原理如下：</p>
+<p>在用webpack构建用于运行在浏览器里的代码时，会把react-native的导入路径替换为react-native-web的导入路径，在react-native-web内部则会以和react-native目录结构一致的方式实现了一致的react-native组件。在react-native-web组件的内部，则把react-native的API映射成了浏览器支持的API。</p>
+<p><img src="https://user-images.githubusercontent.com/5773264/48459994-952d7700-e807-11e8-976f-4e4777a8b1c5.png" alt="react-native-web arch"></p>
+<h4 id="react-native-web和reactxp异同点"><a href="#react-native-web和reactxp异同点" class="headerlink" title="react-native-web和reactxp异同点"></a>react-native-web和reactxp异同点</h4><p>它们的目的都是为了实现多端同构，但react-native-web只专注于Web平台的适配，而reactxp则还需要适配UWP平台。</p>
+<p>在实现Web平台的适配过程中它们都采用了类似的原理：把对外暴露的API或组件映射到Web平台去。</p>
+<p>但在实现Web平台的样式适配时有细微区别：</p>
+<ul>
+<li>reactxp全部通过内联样式实现；</li>
+<li>react-native-web通过为每条不同的样式生产一个className，对于重复出现的样式则通过复用className实现。</li>
+</ul>
+<p>对于这两种不同的实现方式，我更看好react-native-web的实现方式，原因有两个：</p>
+<ol>
+<li>通过复用className节省网络传输字节，如果你需要做服务端渲染这个优势会凸显出来；</li>
+<li>通过className的方式浏览器渲染性能更好，原因是浏览器有做样式计算缓存优化，有人专门写了<a href="https://jsperf.com/inline-style-vs-css-class/2" target="_blank" rel="noopener">性能对比测试页面</a>。</li>
+</ol>
+<h4 id="reactxp优点"><a href="#reactxp优点" class="headerlink" title="reactxp优点"></a>reactxp优点</h4><ul>
+<li>写一份代码就可实现多端渲染，对于有多端需求的产品可以减少代码量和人力；</li>
+<li>由微软Skype团队维护并且用于Skype产品中，有大公司投入资源支持；</li>
+<li>基于TypeScript编写，对IDE友好；</li>
+</ul>
+<h4 id="reactxp缺点"><a href="#reactxp缺点" class="headerlink" title="reactxp缺点"></a>reactxp缺点</h4><ul>
+<li>为了抹平多端平台差异导致灵活性降低，暴露的组件和API较react-native要少很多；</li>
+<li>需要兼容UWP平台导致包袱更重，而目前会针对Windows桌面或手机开发应用的产品也再渐渐减少，大多数产品不需要支持Windows平台；</li>
+<li>需要多导入reactxp这个库，导致打包输出的bundle会变大；并且由于多了一层适配，运行时性能肯定是不如直接使用react-native。</li>
+</ul>
+<p>其中最为致命的缺点可能在于目前reactxp支持的组件和API相当匮乏，一些比较细的操作无法控制；如果你在reactxp项目中确实有需求超出reactxp的能力范围，可以通过导入和使用react-native实现，但这会导致整个项目脱离reactxp体系，因此reactxp为我们实现的多端同构将会无法实现；</p>
+<p>reactxp只保证在它的体型内实现多端同构，但在它的体系内却有很多API不可用。</p>
+<p>reactxp更像是微软为了挽救其奄奄一息的<a href="https://en.wikipedia.org/wiki/Windows_Phone" target="_blank" rel="noopener">Windows Phone</a>系统在做努力，但事实上微软已经失去了移动操作系统市场，无人愿意为用户量很少的WP系统开发APP。</p>
+<h4 id="react-native-web和reactxp对比表"><a href="#react-native-web和reactxp对比表" class="headerlink" title="react-native-web和reactxp对比表"></a>react-native-web和reactxp对比表</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>reactxp</th>
+<th>react-native-web</th>
+<th>对比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>维护人</td>
+<td>微软Skype团队和GitHub社区</td>
+<td>来自Twitter的个人<a href="https://github.com/necolas" target="_blank" rel="noopener">necolas</a>和GitHub社区</td>
+<td>reactxp小胜</td>
+</tr>
+<tr>
+<td>服务端渲染支持</td>
+<td><a href="https://github.com/Microsoft/reactxp/issues/201" target="_blank" rel="noopener">官方没有明确要支持</a></td>
+<td>完全支持</td>
+<td>react-native-web胜</td>
+</tr>
+<tr>
+<td>Web端包大小</td>
+<td>435KB</td>
+<td>354.4KB</td>
+<td>react-native-web胜</td>
+</tr>
+<tr>
+<td>写代码效率</td>
+<td>针对reactxp暴露的API去实现多端适配</td>
+<td>需要自己去验证代码在多端的表现是否一致</td>
+<td>reactxp胜</td>
+</tr>
+<tr>
+<td>学习成本</td>
+<td>除了需要学习reactxp外，不可避免的还需要学习react-native</td>
+<td>只需学习react-native即可</td>
+<td>react-native-web胜</td>
+</tr>
+<tr>
+<td>Github数据</td>
+<td>start=2017年4月 star=6521 issues=23/739 commits=814</td>
+<td>start=2017年7月 star=10151 issues=45/1034 commits=1248</td>
+<td>react-native-web用户更多，代码变动频率更大。reactxp问题响应速度更快。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="如何选择"><a href="#如何选择" class="headerlink" title="如何选择"></a>如何选择</h4><p>如果你开发的产品有适配UWP平台的需求就选择reactxp，否则选择react-native-web，因为reactxp相比于react-native-web除了多支持Windows平台外，并无其它明显优势。</p>
+<h2 id="react-native-web接入"><a href="#react-native-web接入" class="headerlink" title="react-native-web接入"></a>react-native-web接入</h2><p>为了给你现有的ReactNative接入react-native-web，实现ReactNative三端同构的能力，你需要做以下事情：</p>
+<ol>
+<li><p>安装新的依赖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 运行时依赖</span><br><span class="line">npm i react react-dom react-native-web react-art</span><br><span class="line"># 构建工具</span><br><span class="line">npm i -D webpack webpack-dev-server webpack-cli babel-loader babel-plugin-transform-runtime</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为Web平台写一份Webpack配置文件webpack.config.js，内容如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="comment">// 支持图片等静态文件的加载</span></span><br><span class="line">        test: <span class="regexp">/\.(gif|jpe?g|png|svg)$/</span>,</span><br><span class="line">        use: &#123;</span><br><span class="line">          loader: <span class="string">'file-loader'</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">		<span class="comment">// react-native包中有很多es6语法的js，需要用babel转换后才能在浏览器中运行</span></span><br><span class="line">        test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">        use: &#123;</span><br><span class="line">          loader: <span class="string">'babel-loader'</span>,</span><br><span class="line">          options: &#123;</span><br><span class="line">            cacheDirectory: <span class="literal">false</span>,</span><br><span class="line">            presets: [<span class="string">'react-native'</span>],</span><br><span class="line">            plugins: [</span><br><span class="line">              <span class="comment">// 支持 async/await 语法</span></span><br><span class="line">              <span class="string">'transform-runtime'</span></span><br><span class="line">            ]</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  resolve: &#123;</span><br><span class="line">    <span class="comment">// 优先加载以web.js结尾的针对web平台的文件</span></span><br><span class="line">    extensions: &#123;</span><br><span class="line">        <span class="string">'.web.js'</span>,</span><br><span class="line">        <span class="string">'.js'</span>,</span><br><span class="line">        <span class="string">'.json'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    alias: &#123;</span><br><span class="line">       <span class="comment">// 把react-native包映射成react-native-web</span></span><br><span class="line">      <span class="string">'react-native$'</span>: <span class="string">'react-native-web'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>写一个针对Web平台启动入口文件index.web.js：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; AppRegistry &#125; <span class="keyword">from</span> <span class="string">'react-native'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注册组件</span></span><br><span class="line">AppRegistry.registerComponent(<span class="string">'App'</span>, () =&gt; App);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 启动App组件</span></span><br><span class="line">AppRegistry.runApplication(<span class="string">'App'</span>, &#123;</span><br><span class="line">  <span class="comment">// 启动时传给App组件的属性</span></span><br><span class="line">  initialProps: &#123;&#125;,</span><br><span class="line">  <span class="comment">// 渲染App的DOM容器</span></span><br><span class="line">  rootTag: <span class="built_in">document</span>.getElementById(<span class="string">'react-app'</span>)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>写一个index.html文件，引入Webpack构建出的JavaScript，以在Web平台运行：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span></span></span><br><span class="line"><span class="tag">          <span class="attr">content</span>=<span class="string">"width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--以下是正常运行所需的必须样式--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">        html,body,#react-root&#123;</span></span><br><span class="line"><span class="undefined">            height: 100%;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        #react-root&#123;</span></span><br><span class="line"><span class="undefined">            display:flex;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"react-root"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"main.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>完成以上步骤后重新执行webpack构建，再在浏览器中打开index.html你就可以看到ReactNative转出的Web网页了。</p>
+<p>完整的例子可以参考react-native-web的<a href="https://github.com/necolas/react-native-web/tree/master/packages/examples" target="_blank" rel="noopener">官方例子</a>。</p>
+<h2 id="reactxp接入"><a href="#reactxp接入" class="headerlink" title="reactxp接入"></a>reactxp接入</h2><p>由于reactxp所有暴露的API都是支持在Web平台和ReactNative平台同时正常运行的，因此为reactxp应用转Web的方法非常简单，只需为项目加入Webpack构建和运行Web页面的index.html文件。</p>
+<p>Webpack配置文件如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: <span class="string">"./src/index.tsx"</span>,</span><br><span class="line">  mode: <span class="string">"development"</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: <span class="string">"bundle.js"</span>,</span><br><span class="line">    path: __dirname + <span class="string">"/dist"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  resolve: &#123;</span><br><span class="line">    <span class="comment">// 优先加载web.js后缀的文件</span></span><br><span class="line">    extensions: [<span class="string">".web.js"</span>, <span class="string">".ts"</span>, <span class="string">".tsx"</span>, <span class="string">".js"</span>]</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">  	  <span class="comment">// 转换TypeScript文件    </span></span><br><span class="line">      &#123; <span class="attr">test</span>: <span class="regexp">/\.tsx?$/</span>, <span class="attr">loader</span>: <span class="string">"awesome-typescript-loader"</span> &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>再写一个运行Web页面的index.html文件：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">'utf-8'</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">    html, body, .app-container &#123;</span></span><br><span class="line"><span class="undefined">      width: 100%;</span></span><br><span class="line"><span class="undefined">      height: 100%;</span></span><br><span class="line"><span class="undefined">      padding: 0;</span></span><br><span class="line"><span class="undefined">      border: none;</span></span><br><span class="line"><span class="undefined">      margin: 0;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">    *:focus &#123;</span></span><br><span class="line"><span class="undefined">        outline: 0;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">  </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"app-container"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"dist/bundle.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>完整的例子可以参考reactxp的<a href="https://github.com/Microsoft/reactxp/tree/master/samples/hello-world" target="_blank" rel="noopener">官方例子</a>。</p>
+<h2 id="适配你项目中自定义的NativeModules"><a href="#适配你项目中自定义的NativeModules" class="headerlink" title="适配你项目中自定义的NativeModules"></a>适配你项目中自定义的NativeModules</h2><p>ReactNative开发的App中经常会出现ReactNative官方提供的NativeModules不够用的情况，这时你会在项目中开发自己的NativeModules，然后在JavaScript中去调用自己的NativeModules。这在ReactNative环境下运行没有问题，但转成Web后执行时会报错说NativeModules上找不到对应的模块，这时因为在浏览器环境下是不存在这些自定义的NativeModules。为了让页面能正常在浏览器中运行，需要为Web平台也实现一份自定义的NativeModules，实现方法可以web平台的执行入口的最开头注入以下polyfill：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; NativeModules &#125; <span class="keyword">from</span> <span class="string">'react-native'</span>;</span><br><span class="line"><span class="keyword">import</span> MyModule <span class="keyword">from</span> <span class="string">'./MyModule'</span>; <span class="comment">// 实现自定义NativeModules的地方</span></span><br><span class="line"></span><br><span class="line">NativeModules.MyModule = MyModule; <span class="comment">// 挂载MyModule</span></span><br></pre></td></tr></table></figure>
+<p>这段代码的作用是把针对Web平台编写的自定义原生模块挂载到NativeModules对象上成为其属性，以让JavaScript代码在访问自定义NativeModules时访问到针对Web平台编写模块。</p>
+<h2 id="编写特定平台的代码"><a href="#编写特定平台的代码" class="headerlink" title="编写特定平台的代码"></a>编写特定平台的代码</h2><p>为了让ReactNative三端同构能正常的运行，在有些情况下你不得不编写平台特点的代码，因为有些代码只能在特点平台下才能运行，编写Web平台特定的代码的方法有以下三种：</p>
+<ol>
+<li><p>ReactNative.Platform.OS：所有端的代码都在一个文件中，通过以下代码来写web平台专属代码:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Platform &#125; <span class="keyword">from</span> <span class="string">'react-native'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(Platform.OS===<span class="string">'web'</span>)&#123;</span><br><span class="line">  <span class="comment">// web平台专属代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>process.env.platform：通过Webpack注入的环境变量来区分</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (process.env.platform === <span class="string">'web'</span>) &#123;</span><br><span class="line">  <span class="comment">// web平台专属代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码只会在web平台下被打包进去，这和<code>ReactNative.Platform</code>的区别是：</p>
+<p><code>ReactNative.Platform</code>的代码会打包进所有的平台。</p>
+<p>要使用这种方法需要你在webpack.config.js文件中注入环境变量：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">plugins: [</span><br><span class="line">	<span class="keyword">new</span> webpack.DefinePlugin(&#123;</span><br><span class="line">		<span class="string">'process.env'</span>: &#123;</span><br><span class="line">			platform: <span class="built_in">JSON</span>.stringify(platform),</span><br><span class="line">			__DEV__: mode === <span class="string">'development'</span></span><br><span class="line">	&#125;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>.web.js: 在web模式下会优先加载.web.js文件，当.web.js文件不存在时才使用.js文件。</p>
+</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>ReactNative三端同构在理论上虽然可行，并且有现成的方案，但实践是还是会遇到一些问题，例如：</p>
+<ul>
+<li>在Web平台运行出的样式和ReactNative平台不一致，针对这种情况一般是react-native-web库的适配问题，可以在github上提issus或pr；</li>
+<li>有些ReactNative提供的API在Web平台不可能实现适配，例如调摄像头、振动等，对于这种问题只有在Web平台裁剪掉这些功能或使用其它交互方式替代。</li>
+</ul>
+<p>ReactNative三端同构虽然无法实现100%和ReactNative环境运行一致，但能快速简单的转换大多数场景，以低成本的方式为你的项目带来收益。</p>
+<blockquote>
+<p>本文首发于<a href="https://www.ibm.com/developerworks/cn/web/wa-universal-react-native/index.html" target="_blank" rel="noopener">IBM Dev社区</a></p>
+</blockquote>
+
+
+                <hr>
+
+                 <a href="https://github.com/gwuhaolin/blog/issues/18">在 Github 上讨论</a>
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/08/11/WebAssembly 现状与实战/" data-toggle="tooltip" data-placement="top" title="WebAssembly 现状与实战">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#react" title="react">react</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/wu-hao-lin-67-15">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+
+                    
+
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/gwuhaolin">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 浩麟的博客 2018
+                    <br>
+                    Ported by <a href="https://github.com/gwuhaolin">gwuhaolin</a> |
+                    <iframe
+                            style="margin-left: 2px; margin-bottom:-5px;"
+                            frameborder="0" scrolling="0" width="91px" height="20px"
+                            src="https://ghbtns.com/github-btn.html?user=gwuhaolin&repo=blog&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) {
+            o.addEventListener('load', function (e) {
+                c(null, e);
+            }, false);
+        }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if ($('#tag_cloud').length !== 0) {
+        async("https://wuhaolin.cn/js/jquery.tagcloud.js", function () {
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-54964850-1';
+    var _gaDomain = 'wuhaolin.cn';
+
+    // Originial
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Side Catalog -->
+
+
+<!--Google Auto AD-->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-9697944574373240",
+        enable_page_level_ads: true
+    });
+</script>
+
+
+<!-- Image to hack wechat -->
+<img src="https://wuhaolin.cn /img/icon_wechat.png" width="0" height="0"/>
+<!-- Migrate from head to bottom, no longer block render and still work -->
+</body>
+
+</html>
