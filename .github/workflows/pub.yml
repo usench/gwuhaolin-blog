@@ -3,7 +3,7 @@ name: Build & Pub
 on:
   push:
     branches:
-    - master
+      - master
   issues:
     types: [opened, edited, deleted]
 
@@ -11,19 +11,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-    - name: Build
-      run: |
-        npm ci
-        npm run build
-    - name: Commit files
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+      - name: Build
+        run: |
+          npm ci
+          npm run build
+      - name: Commit files
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -m "GitHub Action build docs" -a
-    - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push changes
+          uses: ad-m/github-push-action@master
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
