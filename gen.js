@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 const {execSync} = require('child_process');
 const Lokka = require('lokka').Lokka;
 const Transport = require('lokka-transport-http').Transport;
@@ -18,14 +17,14 @@ const client = new Lokka({
 client.query(`
 {
   repository(owner: "gwuhaolin", name: "blog") {
-    issues(first: 100, orderBy: {field: CREATED_AT, direction: ASC}, states: [OPEN]) {
+    issues(first: 100, orderBy: {field: CREATED_AT, direction: ASC}, states: [OPEN], filterBy: {createdBy: "gwuhaolin"}) {
       edges {
         node {
           title
           body
           createdAt
           url
-          labels(first:100) {
+          labels(first: 100) {
             edges {
               node {
                 name

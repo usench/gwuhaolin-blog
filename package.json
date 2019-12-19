@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "pub": "node gen.js && git add . && git commit -m 'update' && git push",
+    "build": "node gen.js",
     "dev": "hexo server"
   },
   "hexo": {
-    "version": "3.5.0"
+    "version": "3.9.0"
   },
   "dependencies": {
     "hexo": "^3.2.0",
