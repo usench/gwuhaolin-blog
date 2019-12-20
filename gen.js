@@ -56,6 +56,7 @@ ${body}`;
     execSync(`rm -rf ./public`);
     fs.mkdirSync('./public');
     fs.writeFileSync('./public/CNAME', 'wuhaolin.cn\nwww.wuhaolin.cn');
+    fs.writeFileSync('./public/google0cfdf15fc45ac515.html', 'google-site-verification: google0cfdf15fc45ac515.html');
 
     const hexo = new Hexo();
     hexo.init().then(function () {
